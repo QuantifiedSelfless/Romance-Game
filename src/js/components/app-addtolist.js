@@ -3,10 +3,10 @@ var AppActions = require('../actions/app-actions.js');
 
 var AddToList = React.createClass({
     handler: function() {
-        AppActions.addChar_(this.props.item)
+        AppActions.addChar(this.props.item)
     },
-    render: function() {
-        return <button onClick={this.handler}></button>    
+    render: function(item) {
+        return <button onClick={this.handler}>{this.props.item.title}</button>    
     }
 });
 
