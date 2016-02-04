@@ -1,19 +1,22 @@
 React = require('react');
 AppStore = require('../stores/app-store.js');
-
+    
 var GameTitles = React.createClass({
     getInitialState: function() {
-        return 0
+        return {stage: 0}
     },
     componentWillMount: function() {
         AppStore.addChangeListener(this._onChange)
     },
     _onChange: function() {
-        this.setState()
+        this.state.stage++; 
     },
     render: function() {
+        var title_list = ['Please choose 5 personalities you value the most in a romantic partner.'] 
         return (
-            <h1>this.state.items</h1>
+            <h1>{title_list[this.state.stage]}</h1>
         )
     }
 });
+
+module.exports = GameTitles

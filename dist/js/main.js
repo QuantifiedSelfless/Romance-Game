@@ -19622,31 +19622,31 @@ module.exports = require('./lib/React');
 var AppDispatcher = require("../dispatchers/app-dispatcher.js");
 
 var AppActions = {
-    addChar_: function(item) {
+    addChar: function(item) {
         AppDispatcher.handleViewAction({
-            actionType: "ADD_CHAR_",
+            actionType: "ADD_CHAR",
             item: item
         })
     },
     removeChar_: function(index) {
         AppDispatcher.handleViewAction({
-            actionType: "REMOVE_CHAR_",
+            actionType: "REMOVE_CHAR",
             index: index
         })
     }
 }
 module.exports = AppActions;
 
-},{"../dispatchers/app-dispatcher.js":166}],163:[function(require,module,exports){
+},{"../dispatchers/app-dispatcher.js":169}],163:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
 var AddToList = React.createClass({displayName: "AddToList",
     handler: function() {
-        AppActions.addChar_(this.props.item)
+        AppActions.addChar(this.props.item)
     },
-    render: function() {
-        return React.createElement("button", {onClick: this.handler})    
+    render: function(item) {
+        return React.createElement("button", {onClick: this.handler}, this.props.item.title)    
     }
 });
 
@@ -19655,26 +19655,66 @@ module.exports = AddToList;
 },{"../actions/app-actions.js":162,"react":161}],164:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
+var RemoveFromList = require('./app-removefromlist.js');
+
+function charlistItems() {
+    return {items: AppStore.getCart()}
+}
+
+var CharCart = React.createClass({displayName: "CharCart",
+    getInitialState: function() {
+        return charlistItems()
+    },
+    componentWillMount: function() {
+        AppStore.addChangeListener(this._onChange)
+    },
+    _onChange: function() {
+        this.setState(charlistItems())
+    },
+    render: function() {
+        var items = this.state.items.map(function(item, i) {
+            return (
+                React.createElement("tr", {key: i}, 
+                    React.createElement("td", null, React.createElement(RemoveFromList, {index: i})), 
+                    React.createElement("td", null, item.title)
+                )
+            );
+    })
+    return (
+        React.createElement("table", {className: "table table-hover"}, 
+            React.createElement("thead", null, 
+                React.createElement("tr", null, 
+                    React.createElement("th", null), 
+                    React.createElement("th", null, "Sarah Rocks")
+                )
+            ), 
+            React.createElement("tbody", null, 
+                items
+            )
+        )
+        )
+    }
+});
+
+module.exports = CharCart
+
+},{"../stores/app-store.js":171,"./app-removefromlist.js":167,"react":161}],165:[function(require,module,exports){
+var React = require('react');
+var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
 
 function getCharList() {
-    return {items: AppStore.getList()}
+    return {items: AppStore.getChar()}
 }
 
 var CharList = React.createClass({displayName: "CharList",
     getInitialState: function() {
         return getCharList()
     },
-    componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
-    },
-    _onChange: function() {
-        this.setState(charItems())
-    },
     render: function() {
         var items = this.state.items.map(function(item){
             return (
-                React.createElement(AddToCart, {item: item}) 
+                React.createElement(AddToList, {item: item}) 
         );
     })
     return (
@@ -19687,26 +19727,73 @@ var CharList = React.createClass({displayName: "CharList",
 
 module.exports = CharList
 
-},{"../stores/app-store.js":168,"./app-addtolist.js":163,"react":161}],165:[function(require,module,exports){
+},{"../stores/app-store.js":171,"./app-addtolist.js":163,"react":161}],166:[function(require,module,exports){
+React = require('react');
+AppStore = require('../stores/app-store.js');
+    
+var GameTitles = React.createClass({displayName: "GameTitles",
+    getInitialState: function() {
+        return {stage: 0}
+    },
+    componentWillMount: function() {
+        AppStore.addChangeListener(this._onChange)
+    },
+    _onChange: function() {
+        this.state.stage++; 
+    },
+    render: function() {
+        var title_list = ['Please choose 5 personalities you value the most in a romantic partner.'] 
+        return (
+            React.createElement("h1", null, title_list[this.state.stage])
+        )
+    }
+});
+
+module.exports = GameTitles
+
+},{"../stores/app-store.js":171,"react":161}],167:[function(require,module,exports){
+var React = require('react');
+var AppActions = require('../actions/app-actions.js');
+
+var RemoveFromList = React.createClass({displayName: "RemoveFromList",
+    handler: function() {
+        AppActions.removeChar_(this.props.index)
+    },
+    render: function() {
+        return React.createElement("h1", {onClick: this.handler}, "x")
+    }
+});
+
+module.exports = RemoveFromList;
+
+},{"../actions/app-actions.js":162,"react":161}],168:[function(require,module,exports){
 var React = require('react');
 var CharList = require('./app-charlist.js');
+var GameTitles = require('./app-gametitles.js');
+var CharCart = require('./app-charcart.js');
 
 var App = React.createClass({displayName: "App",
+    getInitialState: function() {
+        return {
+            title: React.createElement(GameTitles, null),
+            body: React.createElement(CharList, null), 
+            misc: React.createElement(CharCart, null)
+        } 
+    },
     render: function() {
         return (
             React.createElement("div", null, 
-                "//", React.createElement(Titles, null), 
-                React.createElement("h1", null, "Character List"), 
-                React.createElement(CharList, null), 
-                "//", React.createElement(Cart, null)
+                React.createElement("div", null, this.state.title), 
+                React.createElement("div", null, this.state.body), 
+                React.createElement("div", null, this.state.misc)
             )
-        );
+        )
     }
 });
 
 module.exports = App;
 
-},{"./app-charlist.js":164,"react":161}],166:[function(require,module,exports){
+},{"./app-charcart.js":164,"./app-charlist.js":165,"./app-gametitles.js":166,"react":161}],169:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
@@ -19722,40 +19809,49 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":3,"react/lib/Object.assign":27}],167:[function(require,module,exports){
+},{"flux":3,"react/lib/Object.assign":27}],170:[function(require,module,exports){
 var App = require('./components/app');
 var React = require('react');
 
 React.render(React.createElement(App, null), document.getElementById('main'));
 
-},{"./components/app":165,"react":161}],168:[function(require,module,exports){
+},{"./components/app":168,"react":161}],171:[function(require,module,exports){
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
 
 var CHANGE_EVENT = 'change';
+//var title_list = [];
+var char_list = [];
+var temp_list = ['Independent', 'Confident', 'Patient', 'Confident', 'Resourceful', 'Generous', 'Energetic', 'Ambitious', 'Optimistic', 'Clever', 'Encouraging', 'Humorous', 'Observant', 'Reliable', 'Accepting', 'Passionate'];
 
-var _char_list = [];
-var title_list = ['Independent', 'Patient', 'Confident', 'Resourceful', 'Generous', 'Energetic', 'Ambitious', 'Optimistic', 'Clever', 'Encouraging', 'Humorous', 'Observant', 'Reliable', 'Accepting', 'Passionate'];
+var title_list = ['Please choose 5 characteristics you value the most in a romantic partner.']
 
-for(var i=1; i<(title_list.length-1); i++) {
-    _char_list.push({
+for(var i=0; i<(temp_list.length); i++) {
+    char_list.push({
         'id': i,
-        'title': title_list[i]
+        'title': temp_list[i]
     });
 }
 
-var _list_items = [];
+//for(var i=0; i<(temp_list2.length); i++) {
+//    title_list.push({
+//        'id': i,
+//        'title': temp_list2[i]
+//    });
+//}
 
-function _removeChar_(index) {
-    _list_items[index].inList = false;
-    _list_items[index].splice(index, 1);
+var cart_items = [];
+
+function removeChar(index) {
+    cart_items[index].inList = false;
+    cart_items.splice(index, 1);
 }
 
-function _addChar_(item) {
-    if(!char_.inList) {
+function addChar(item) {
+    if(!item.inList) {
         item['inList'] = true;
-        _list_items.push(item);
+        cart_items.push(item);
     }
     //else {
     //    return {'message': 'Please select a unique characteristic'}
@@ -19772,21 +19868,24 @@ var AppStore = assign(EventEmitter.prototype, {
     removeChangeListener: function(callback) {
         this.removeListener(CHANGE_EVENT, callback)
     },
-    getList: function() {
-        return _list_items
+    getTitles: function() {
+        return title_list
+    }, 
+    getCart: function() {
+        return cart_items
     },
-    getChar_: function() {
-        return _char_list
+    getChar: function() {
+        return char_list
     },
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
         switch(action.actionType) {
-            case "ADD_CHAR_":
-                _addChar_(payload.action.item);
+            case "ADD_CHAR":
+                addChar(payload.action.item);
                 break;
 
-            case "REMOVE_CHAR_":
-                _removeChar_(payload.action.index);
+            case "REMOVE_CHAR":
+                removeChar(payload.action.index);
                 break;
         }
 
@@ -19798,4 +19897,4 @@ var AppStore = assign(EventEmitter.prototype, {
 
 module.exports = AppStore;
 
-},{"../dispatchers/app-dispatcher.js":166,"events":1,"react/lib/Object.assign":27}]},{},[167]);
+},{"../dispatchers/app-dispatcher.js":169,"events":1,"react/lib/Object.assign":27}]},{},[170]);

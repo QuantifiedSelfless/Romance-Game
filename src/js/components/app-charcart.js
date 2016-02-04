@@ -1,9 +1,9 @@
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
-var RemoveFromList = require('../app-removefromlist.js'); h
+var RemoveFromList = require('./app-removefromlist.js');
 
 function charlistItems() {
-    return {items: AppStore.getList()}
+    return {items: AppStore.getCart()}
 }
 
 var CharCart = React.createClass({
@@ -23,16 +23,16 @@ var CharCart = React.createClass({
                     <td><RemoveFromList index={i} /></td>
                     <td>{item.title}</td>
                 </tr>
-                );
+            );
     })
     return (
         <table className="table table-hover">
-            <thread>
+            <thead>
                 <tr>
                     <th></th>
-                    <th>Choosen Characteristics</th>
+                    <th>Sarah Rocks</th>
                 </tr>
-            </thread>
+            </thead>
             <tbody>
                 {items}
             </tbody>
