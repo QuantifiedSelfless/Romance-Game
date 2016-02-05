@@ -39,7 +39,12 @@ function addChar(item) {
     //    return {'message': 'Please select a unique characteristic'}
     //}
 }
-    
+function increaseState(item) {
+    item++;
+}  
+function decreaseState(item) {
+    item--;
+}
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT)
@@ -64,10 +69,12 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 addChar(payload.action.item);
+                increaseState(payload.action.intValue);
                 break;
 
             case "REMOVE_CHAR":
                 removeChar(payload.action.index);
+                decreaseState(payload.action.intValue);
                 break;
         }
 

@@ -3,7 +3,7 @@ var AppActions = require('../actions/app-actions.js');
 
 var RemoveFromList = React.createClass({
     handler: function() {
-        AppActions.removeChar_(this.props.index)
+        AppActions.removeChar(this.props.index, this.props.intValue)
     },
     render: function() {
         return <h1 onClick={this.handler}>x</h1>

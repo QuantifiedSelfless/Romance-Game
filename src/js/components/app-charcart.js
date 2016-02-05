@@ -1,6 +1,7 @@
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
+var AppActions = require('../actions/app-actions.js')
 
 function charlistItems() {
     return {items: AppStore.getCart()}
@@ -20,7 +21,7 @@ var CharCart = React.createClass({
         var items = this.state.items.map(function(item, i) {
             return (
                 <tr key={i}>
-                    <td><RemoveFromList index={i} /></td>
+                    <td><RemoveFromList index={i} intValue={this.props.intValue}/></td>
                     <td>{item.title}</td>
                 </tr>
             );

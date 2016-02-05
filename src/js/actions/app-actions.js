@@ -1,17 +1,19 @@
 var AppDispatcher = require("../dispatchers/app-dispatcher.js");
 
 var AppActions = {
-    addChar: function(item) {
+    addChar: function(item, intValue) {
         AppDispatcher.handleViewAction({
             actionType: "ADD_CHAR",
-            item: item
+            item: item,
+            intValue: intValue
         })
     },
-    removeChar_: function(index) {
+    removeChar: function(index, intValue) {
         AppDispatcher.handleViewAction({
             actionType: "REMOVE_CHAR",
-            index: index
+            index: index,
+            intValue: intValue
         })
-    }
+    },
 }
 module.exports = AppActions;

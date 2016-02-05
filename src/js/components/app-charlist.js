@@ -13,7 +13,7 @@ var CharList = React.createClass({
     render: function() {
         var items = this.state.items.map(function(item){
             return (
-                <AddToList item={item}/> 
+                <AddToList item={item} intValue={this.props.intValue}/> 
         );
     })
     return (

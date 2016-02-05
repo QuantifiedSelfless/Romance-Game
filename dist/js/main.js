@@ -19622,18 +19622,20 @@ module.exports = require('./lib/React');
 var AppDispatcher = require("../dispatchers/app-dispatcher.js");
 
 var AppActions = {
-    addChar: function(item) {
+    addChar: function(item, intValue) {
         AppDispatcher.handleViewAction({
             actionType: "ADD_CHAR",
-            item: item
+            item: item,
+            intValue: intValue
         })
     },
-    removeChar_: function(index) {
+    removeChar: function(index, intValue) {
         AppDispatcher.handleViewAction({
             actionType: "REMOVE_CHAR",
-            index: index
+            index: index,
+            intValue: intValue
         })
-    }
+    },
 }
 module.exports = AppActions;
 
@@ -19643,7 +19645,7 @@ var AppActions = require('../actions/app-actions.js');
 
 var AddToList = React.createClass({displayName: "AddToList",
     handler: function() {
-        AppActions.addChar(this.props.item)
+        AppActions.addChar(this.props.item, this.props.intValue)
     },
     render: function(item) {
         return React.createElement("button", {onClick: this.handler}, this.props.item.title)    
@@ -19656,6 +19658,7 @@ module.exports = AddToList;
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
+var AppActions = require('../actions/app-actions.js')
 
 function charlistItems() {
     return {items: AppStore.getCart()}
@@ -19675,7 +19678,7 @@ var CharCart = React.createClass({displayName: "CharCart",
         var items = this.state.items.map(function(item, i) {
             return (
                 React.createElement("tr", {key: i}, 
-                    React.createElement("td", null, React.createElement(RemoveFromList, {index: i})), 
+                    React.createElement("td", null, React.createElement(RemoveFromList, {index: i, intValue: this.props.intValue})), 
                     React.createElement("td", null, item.title)
                 )
             );
@@ -19698,7 +19701,7 @@ var CharCart = React.createClass({displayName: "CharCart",
 
 module.exports = CharCart
 
-},{"../stores/app-store.js":171,"./app-removefromlist.js":167,"react":161}],165:[function(require,module,exports){
+},{"../actions/app-actions.js":162,"../stores/app-store.js":171,"./app-removefromlist.js":167,"react":161}],165:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
@@ -19714,7 +19717,7 @@ var CharList = React.createClass({displayName: "CharList",
     render: function() {
         var items = this.state.items.map(function(item){
             return (
-                React.createElement(AddToList, {item: item}) 
+                React.createElement(AddToList, {item: item, intValue: this.props.intValue}) 
         );
     })
     return (
@@ -19757,7 +19760,7 @@ var AppActions = require('../actions/app-actions.js');
 
 var RemoveFromList = React.createClass({displayName: "RemoveFromList",
     handler: function() {
-        AppActions.removeChar_(this.props.index)
+        AppActions.removeChar(this.props.index, this.props.intValue)
     },
     render: function() {
         return React.createElement("h1", {onClick: this.handler}, "x")
@@ -19771,14 +19774,23 @@ var React = require('react');
 var CharList = require('./app-charlist.js');
 var GameTitles = require('./app-gametitles.js');
 var CharCart = require('./app-charcart.js');
+var AppStore = require('../stores/app-store.js');
 
 var App = React.createClass({displayName: "App",
     getInitialState: function() {
         return {
             title: React.createElement(GameTitles, null),
-            body: React.createElement(CharList, null), 
-            misc: React.createElement(CharCart, null)
+            body: React.createElement(CharList, {intValue: this.props.intValue}), 
+            misc: React.createElement(CharCart, {intValue: this.props.intValue})
         } 
+    },
+    componentWillMount: function() {
+        AppStore.addChangeListener(this._onChange)
+    },
+    _onChange: function() {
+        if (this.props.inValue == 5) { 
+            this.state.body = React.createElement(GameTitles, null)
+        }
     },
     render: function() {
         return (
@@ -19793,7 +19805,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"./app-charcart.js":164,"./app-charlist.js":165,"./app-gametitles.js":166,"react":161}],169:[function(require,module,exports){
+},{"../stores/app-store.js":171,"./app-charcart.js":164,"./app-charlist.js":165,"./app-gametitles.js":166,"react":161}],169:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
@@ -19813,7 +19825,7 @@ module.exports = AppDispatcher;
 var App = require('./components/app');
 var React = require('react');
 
-React.render(React.createElement(App, null), document.getElementById('main'));
+React.render(React.createElement(App, {intValue: 1}), document.getElementById('main'));
 
 },{"./components/app":168,"react":161}],171:[function(require,module,exports){
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
@@ -19857,7 +19869,12 @@ function addChar(item) {
     //    return {'message': 'Please select a unique characteristic'}
     //}
 }
-    
+function increaseState(item) {
+    item++;
+}  
+function decreaseState(item) {
+    item--;
+}
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT)
@@ -19882,10 +19899,12 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 addChar(payload.action.item);
+                increaseState(payload.action.intValue);
                 break;
 
             case "REMOVE_CHAR":
                 removeChar(payload.action.index);
+                decreaseState(payload.action.intValue);
                 break;
         }
 
