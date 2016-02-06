@@ -7,10 +7,11 @@ var AppStore = require('../stores/app-store.js');
 var App = React.createClass({
     getInitialState: function() {
         return {
-            currState: this.props.intValue,
-            title: <GameTitles />,
-            body: <CharList intValue={this.props.intValue} />, 
-            misc: <CharCart intValue={this.props.intValue} />
+            currState: 1,
+            stage: 0,
+            title: GameTitles, 
+            body: CharList, 
+            misc: CharCart
         } 
     },
 
@@ -19,18 +20,18 @@ var App = React.createClass({
     },
 
     _onChange: function() {
-        this.setState({ currState: this.state.currState + 1 });
         console.log(this.state.currState);
-        if (newState == 5) { 
-            this.state.body = <GameTitles />
+        this.setState({ currState: this.state.currState + 1 });
+        if (this.state.currState >= 5) {
+            this.setState({ stage: this.state.stage + 1 })
         }
     },
     render: function() {
         return (
             <div>
-                <div>{this.state.title}</div>
-                <div>{this.state.body}</div>
-                <div>{this.state.misc}</div>
+                <div><this.state.title stage={this.state.stage} /></div>
+                <div><this.state.body /></div>
+                <div><this.state.misc /></div>
             </div>
         )
     }

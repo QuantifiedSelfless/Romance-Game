@@ -5,14 +5,12 @@ var AppActions = {
         AppDispatcher.handleViewAction({
             actionType: "ADD_CHAR",
             item: item,
-            intValue: intValue
         })
     },
     removeChar: function(index, intValue) {
         AppDispatcher.handleViewAction({
             actionType: "REMOVE_CHAR",
             index: index,
-            intValue: intValue
         })
     },
 }

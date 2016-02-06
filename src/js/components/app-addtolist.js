@@ -7,7 +7,7 @@ var AddToList = React.createClass({
     },
 
     handler: function() {
-        AppActions.addChar(this.props.item, this.props.intValue)
+        AppActions.addChar(this.props.item)
     },
 
     render: function() {

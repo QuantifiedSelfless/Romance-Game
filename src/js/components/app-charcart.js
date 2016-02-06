@@ -13,15 +13,14 @@ var CharCart = React.createClass({
         AppStore.addChangeListener(this._onChange)
     },
     _onChange: function() {
-        this.setState(charlistItems())
+        this.setState({ items: AppStore.getCart() });
     },
     render: function() {
-        var val = this.props.intValue
         var items = this.state.items.map(function(item, i) {
             return (
                 <tr key={i}>
-                    <td><RemoveFromList index={i} intValue={val}/></td>
-                    <td>{item.title}</td>
+                    <td> <RemoveFromList index={i} /> </td>
+                    <td> {item.title} </td>
                 </tr>
             );
     })

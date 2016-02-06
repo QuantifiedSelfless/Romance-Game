@@ -7,7 +7,6 @@ var CHANGE_EVENT = 'change';
 var char_list = [];
 var temp_list = ['Independent', 'Confident', 'Patient', 'Confident', 'Resourceful', 'Generous', 'Energetic', 'Ambitious', 'Optimistic', 'Clever', 'Encouraging', 'Humorous', 'Observant', 'Reliable', 'Accepting', 'Passionate'];
 
-var title_list = ['Please choose 5 characteristics you value the most in a romantic partner.']
 
 for(var i=0; i<(temp_list.length); i++) {
     char_list.push({
@@ -15,13 +14,6 @@ for(var i=0; i<(temp_list.length); i++) {
         'title': temp_list[i]
     });
 }
-
-//for(var i=0; i<(temp_list2.length); i++) {
-//    title_list.push({
-//        'id': i,
-//        'title': temp_list2[i]
-//    });
-//}
 
 var cart_items = [];
 
@@ -35,15 +27,6 @@ function addChar(item) {
         item['inList'] = true;
         cart_items.push(item);
     }
-    //else {
-    //    return {'message': 'Please select a unique characteristic'}
-    //}
-}
-function increaseState(item) {
-    item++;
-}  
-function decreaseState(item) {
-    item--;
 }
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function() {
@@ -69,12 +52,10 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 addChar(payload.action.item);
-                increaseState(payload.action.intValue);
                 break;
 
             case "REMOVE_CHAR":
                 removeChar(payload.action.index);
-                decreaseState(payload.action.intValue);
                 break;
         }
 
