@@ -7,16 +7,21 @@ var AppStore = require('../stores/app-store.js');
 var App = React.createClass({
     getInitialState: function() {
         return {
+            currState: this.props.intValue,
             title: <GameTitles />,
-            body: <CharList intValue={this.props.intValue}/>, 
-            misc: <CharCart intValue={this.props.intValue}/>
+            body: <CharList intValue={this.props.intValue} />, 
+            misc: <CharCart intValue={this.props.intValue} />
         } 
     },
+
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
+        AppStore.addChangeListener(this._onChange);
     },
+
     _onChange: function() {
-        if (this.props.inValue == 5) { 
+        this.setState({ currState: this.state.currState + 1 });
+        console.log(this.state.currState);
+        if (newState == 5) { 
             this.state.body = <GameTitles />
         }
     },

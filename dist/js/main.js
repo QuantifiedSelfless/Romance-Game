@@ -19644,12 +19644,19 @@ var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
 var AddToList = React.createClass({displayName: "AddToList",
+    getInitialState: function () {
+        return {};
+    },
+
     handler: function() {
         AppActions.addChar(this.props.item, this.props.intValue)
     },
-    render: function(item) {
-        return React.createElement("button", {onClick: this.handler}, this.props.item.title)    
+
+    render: function() {
+        return (
+            React.createElement("button", {onClick: this.handler}, this.props.item.title));
     }
+    
 });
 
 module.exports = AddToList;
@@ -19660,13 +19667,11 @@ var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
 var AppActions = require('../actions/app-actions.js')
 
-function charlistItems() {
-    return {items: AppStore.getCart()}
-}
+
 
 var CharCart = React.createClass({displayName: "CharCart",
     getInitialState: function() {
-        return charlistItems()
+        return {items: AppStore.getCart()};
     },
     componentWillMount: function() {
         AppStore.addChangeListener(this._onChange)
@@ -19675,10 +19680,11 @@ var CharCart = React.createClass({displayName: "CharCart",
         this.setState(charlistItems())
     },
     render: function() {
+        var val = this.props.intValue
         var items = this.state.items.map(function(item, i) {
             return (
                 React.createElement("tr", {key: i}, 
-                    React.createElement("td", null, React.createElement(RemoveFromList, {index: i, intValue: this.props.intValue})), 
+                    React.createElement("td", null, React.createElement(RemoveFromList, {index: i, intValue: val})), 
                     React.createElement("td", null, item.title)
                 )
             );
@@ -19706,24 +19712,25 @@ var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
 
-function getCharList() {
-    return {items: AppStore.getChar()}
-}
 
 var CharList = React.createClass({displayName: "CharList",
-    getInitialState: function() {
-        return getCharList()
+    
+    getInitialState: function () {
+        return { items: AppStore.getChar() };
     },
+
     render: function() {
-        var items = this.state.items.map(function(item){
+        var val = this.props.intValue;
+        var items = this.state.items.map( function ( item ) {
             return (
-                React.createElement(AddToList, {item: item, intValue: this.props.intValue}) 
+                React.createElement(AddToList, {item: item, intValue: val}) 
         );
-    })
-    return (
-        React.createElement("div", null, 
-            items
-        )
+        });
+    
+        return (
+            React.createElement("div", null, 
+                items
+            )
         )
     }
 }); 
@@ -19779,16 +19786,21 @@ var AppStore = require('../stores/app-store.js');
 var App = React.createClass({displayName: "App",
     getInitialState: function() {
         return {
+            currState: this.props.intValue,
             title: React.createElement(GameTitles, null),
             body: React.createElement(CharList, {intValue: this.props.intValue}), 
             misc: React.createElement(CharCart, {intValue: this.props.intValue})
         } 
     },
+
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
+        AppStore.addChangeListener(this._onChange);
     },
+
     _onChange: function() {
-        if (this.props.inValue == 5) { 
+        this.setState({ currState: this.state.currState + 1 });
+        console.log(this.state.currState);
+        if (newState == 5) { 
             this.state.body = React.createElement(GameTitles, null)
         }
     },

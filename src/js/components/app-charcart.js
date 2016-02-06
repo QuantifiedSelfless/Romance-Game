@@ -3,13 +3,11 @@ var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
 var AppActions = require('../actions/app-actions.js')
 
-function charlistItems() {
-    return {items: AppStore.getCart()}
-}
+
 
 var CharCart = React.createClass({
     getInitialState: function() {
-        return charlistItems()
+        return {items: AppStore.getCart()};
     },
     componentWillMount: function() {
         AppStore.addChangeListener(this._onChange)
@@ -18,10 +16,11 @@ var CharCart = React.createClass({
         this.setState(charlistItems())
     },
     render: function() {
+        var val = this.props.intValue
         var items = this.state.items.map(function(item, i) {
             return (
                 <tr key={i}>
-                    <td><RemoveFromList index={i} intValue={this.props.intValue}/></td>
+                    <td><RemoveFromList index={i} intValue={val}/></td>
                     <td>{item.title}</td>
                 </tr>
             );

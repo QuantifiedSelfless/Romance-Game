@@ -2,24 +2,25 @@ var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
 
-function getCharList() {
-    return {items: AppStore.getChar()}
-}
 
 var CharList = React.createClass({
-    getInitialState: function() {
-        return getCharList()
+    
+    getInitialState: function () {
+        return { items: AppStore.getChar() };
     },
+
     render: function() {
-        var items = this.state.items.map(function(item){
+        var val = this.props.intValue;
+        var items = this.state.items.map( function ( item ) {
             return (
-                <AddToList item={item} intValue={this.props.intValue}/> 
+                <AddToList item={item} intValue={val} /> 
         );
-    })
-    return (
-        <div>
-            {items}
-        </div>
+        });
+    
+        return (
+            <div>
+                {items}
+            </div>
         )
     }
 }); 
