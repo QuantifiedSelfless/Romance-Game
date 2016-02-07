@@ -12,12 +12,6 @@ var AppActions = {
             actionType: "REMOVE_CHAR",
             index: index,
         })
-    },
-    addAnswer: function(item) {
-        AppDispatcher.handleViewAction({
-            actionType: "ADD_ANSWER",
-            item: item,
-        })
     }
 }
 module.exports = AppActions;

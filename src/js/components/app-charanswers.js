@@ -1,16 +1,15 @@
 React = require('react');
 AppStore = require('../stores/app-store.js');
 AppActions = require('../actions/app-actions.js');
-AddToAnswers = require('./app-addtoanswers.js');
-
+AddToList = require('./app-addtolist.js');
 CharAnswers = React.createClass({ 
     getInitialState: function() {
-        return { items: AppStore.getAnswers() }
+        return { items: AppStore.getAnswerTitles() }
     },
     render: function() {
         var items = this.state.items.map( function(item) {
             return (
-                <AddToAnswers item={item} />
+                <AddToList item={item} />
             );
         });
         return  (

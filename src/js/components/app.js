@@ -4,6 +4,9 @@ var GameTitles = require('./app-gametitles.js');
 var CharCart = require('./app-charcart.js');
 var AppStore = require('../stores/app-store.js');
 var CharQuestion = require('./app-charquestions.js');
+var CharAnswers = require('./app-charanswers.js');
+
+
 var App = React.createClass({
     getInitialState: function() {
         return {
@@ -26,11 +29,11 @@ var App = React.createClass({
                 if (this.state.currState == 5) {
                     this.setState({ 
                         stage: this.state.stage + 1,
-                        body: CharQuestion                               
+                        body: CharQuestion,                               
+                        misc: CharAnswers
                     });
                 };
                 break;
-
             case 1:
                 break;
             case 2:

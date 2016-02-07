@@ -19633,17 +19633,11 @@ var AppActions = {
             actionType: "REMOVE_CHAR",
             index: index,
         })
-    },
-    addAnswer: function(item) {
-        AppDispatcher.handleViewAction({
-            actionType: "ADD_ANSWER",
-            item: item,
-        })
     }
 }
 module.exports = AppActions;
 
-},{"../dispatchers/app-dispatcher.js":170}],163:[function(require,module,exports){
+},{"../dispatchers/app-dispatcher.js":171}],163:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
@@ -19666,6 +19660,31 @@ var AddToList = React.createClass({displayName: "AddToList",
 module.exports = AddToList;
 
 },{"../actions/app-actions.js":162,"react":161}],164:[function(require,module,exports){
+React = require('react');
+AppStore = require('../stores/app-store.js');
+AppActions = require('../actions/app-actions.js');
+AddToList = require('./app-addtolist.js');
+CharAnswers = React.createClass({displayName: "CharAnswers", 
+    getInitialState: function() {
+        return { items: AppStore.getAnswerTitles() }
+    },
+    render: function() {
+        var items = this.state.items.map( function(item) {
+            return (
+                React.createElement(AddToList, {item: item})
+            );
+        });
+        return  (
+            React.createElement("div", null, 
+                items
+            )
+        );
+    }
+});
+
+module.exports = CharAnswers;
+
+},{"../actions/app-actions.js":162,"../stores/app-store.js":173,"./app-addtolist.js":163,"react":161}],165:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
@@ -19710,7 +19729,7 @@ var CharCart = React.createClass({displayName: "CharCart",
 
 module.exports = CharCart
 
-},{"../actions/app-actions.js":162,"../stores/app-store.js":172,"./app-removefromlist.js":168,"react":161}],165:[function(require,module,exports){
+},{"../actions/app-actions.js":162,"../stores/app-store.js":173,"./app-removefromlist.js":169,"react":161}],166:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
@@ -19739,7 +19758,7 @@ var CharList = React.createClass({displayName: "CharList",
 
 module.exports = CharList
 
-},{"../stores/app-store.js":172,"./app-addtolist.js":163,"react":161}],166:[function(require,module,exports){
+},{"../stores/app-store.js":173,"./app-addtolist.js":163,"react":161}],167:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
@@ -19758,6 +19777,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
     },
     render: function() {
         var items = this.state.items.map(function (item) {
+            item['stage'] = '1';  
             return (
                 item.question
             );
@@ -19770,22 +19790,27 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
 
 module.exports = CharQuestion;
 
-},{"../stores/app-store.js":172,"react":161}],167:[function(require,module,exports){
+},{"../stores/app-store.js":173,"react":161}],168:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
     
 var GameTitles = React.createClass({displayName: "GameTitles",
-    render: function() {
-        var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.'] 
+    
+    getInitialState: function() {
+        return { titles: AppStore.getTitles() }
+    },
+
+    render: function() { 
         return (
-            React.createElement("h1", null, title_list[this.props.stage])
+            React.createElement("h1", null, this.state.titles[this.props.stage])
         )
     }
+
 });
 
 module.exports = GameTitles
 
-},{"../stores/app-store.js":172,"react":161}],168:[function(require,module,exports){
+},{"../stores/app-store.js":173,"react":161}],169:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
@@ -19800,13 +19825,16 @@ var RemoveFromList = React.createClass({displayName: "RemoveFromList",
 
 module.exports = RemoveFromList;
 
-},{"../actions/app-actions.js":162,"react":161}],169:[function(require,module,exports){
+},{"../actions/app-actions.js":162,"react":161}],170:[function(require,module,exports){
 var React = require('react');
 var CharList = require('./app-charlist.js');
 var GameTitles = require('./app-gametitles.js');
 var CharCart = require('./app-charcart.js');
 var AppStore = require('../stores/app-store.js');
 var CharQuestion = require('./app-charquestions.js');
+var CharAnswers = require('./app-charanswers.js');
+
+
 var App = React.createClass({displayName: "App",
     getInitialState: function() {
         return {
@@ -19829,11 +19857,11 @@ var App = React.createClass({displayName: "App",
                 if (this.state.currState == 5) {
                     this.setState({ 
                         stage: this.state.stage + 1,
-                        body: CharQuestion                               
+                        body: CharQuestion,                               
+                        misc: CharAnswers
                     });
                 };
                 break;
-
             case 1:
                 break;
             case 2:
@@ -19853,7 +19881,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"../stores/app-store.js":172,"./app-charcart.js":164,"./app-charlist.js":165,"./app-charquestions.js":166,"./app-gametitles.js":167,"react":161}],170:[function(require,module,exports){
+},{"../stores/app-store.js":173,"./app-charanswers.js":164,"./app-charcart.js":165,"./app-charlist.js":166,"./app-charquestions.js":167,"./app-gametitles.js":168,"react":161}],171:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
@@ -19869,44 +19897,57 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":3,"react/lib/Object.assign":27}],171:[function(require,module,exports){
+},{"flux":3,"react/lib/Object.assign":27}],172:[function(require,module,exports){
 var App = require('./components/app');
 var React = require('react');
 
 React.render(React.createElement(App, null), document.getElementById('main'));
 
-},{"./components/app":169,"react":161}],172:[function(require,module,exports){
+},{"./components/app":170,"react":161}],173:[function(require,module,exports){
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
 
 var CHANGE_EVENT = 'change';
-//var title_list = [];
-var char_list = [];
 
+var char_list = [];
+var answer_titles = [];
+var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.'] 
 var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable']
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?']
+var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree']
+
 for(var i=0; i<(temp_list.length); i++) {
     char_list.push({
-        'id': i,
+        'stage': 0,
         'title': temp_list[i],
         'question': question_list[i]
     });
+    answer_titles.push({
+        'stage': 1,
+        'title': temp_titles[i],
+    });
 }
 
-var cart_items = [];
+//arrays to keep track of user answers
+var cart_items = []; //stage 1
+var answer_items = []; //stage 2
 
+//stage 1 remove from cart
 function removeChar(index) {
     cart_items[index].inList = false;
-    cart_items.splice(index, 1);
+    cart_items.splice(index, 1); 
 }
 
-function addChar(item) {
+//stage 1, 2 keeping track of characteristics choosen, in addition to answers to the
+//stage 2 questions
+function addChar(item, list) {
     if(!item.inList) {
         item['inList'] = true;
-        cart_items.push(item);
+        list.push(item);
     }
 }
+
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT)
@@ -19916,6 +19957,9 @@ var AppStore = assign(EventEmitter.prototype, {
     },
     removeChangeListener: function(callback) {
         this.removeListener(CHANGE_EVENT, callback)
+    },
+    getAnswerTitles: function() {
+        return answer_titles
     },
     getTitles: function() {
         return title_list
@@ -19930,7 +19974,12 @@ var AppStore = assign(EventEmitter.prototype, {
         var action = payload.action;
         switch(action.actionType) {
             case "ADD_CHAR":
-                addChar(payload.action.item);
+                if (!payload.action.item.stage) {
+                    addChar(payload.action.item, cart_items);
+                }
+                else {
+                    addChar(payload.action.item, answer_items);
+                }
                 break;
 
             case "REMOVE_CHAR":
@@ -19946,4 +19995,4 @@ var AppStore = assign(EventEmitter.prototype, {
 
 module.exports = AppStore;
 
-},{"../dispatchers/app-dispatcher.js":170,"events":1,"react/lib/Object.assign":27}]},{},[171]);
+},{"../dispatchers/app-dispatcher.js":171,"events":1,"react/lib/Object.assign":27}]},{},[172]);
