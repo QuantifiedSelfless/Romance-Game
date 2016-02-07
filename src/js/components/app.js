@@ -3,7 +3,7 @@ var CharList = require('./app-charlist.js');
 var GameTitles = require('./app-gametitles.js');
 var CharCart = require('./app-charcart.js');
 var AppStore = require('../stores/app-store.js');
-
+var CharQuestion = require('./app-charquestions.js');
 var App = React.createClass({
     getInitialState: function() {
         return {
@@ -20,10 +20,21 @@ var App = React.createClass({
     },
 
     _onChange: function() {
-        console.log(this.state.currState);
-        this.setState({ currState: this.state.currState + 1 });
-        if (this.state.currState >= 5) {
-            this.setState({ stage: this.state.stage + 1 })
+        switch(this.state.stage) {
+            case 0:
+                this.setState({ currState: this.state.currState + 1 });
+                if (this.state.currState == 5) {
+                    this.setState({ 
+                        stage: this.state.stage + 1,
+                        body: CharQuestion                               
+                    });
+                };
+                break;
+
+            case 1:
+                break;
+            case 2:
+                break;
         }
     },
     render: function() {
