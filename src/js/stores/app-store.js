@@ -11,7 +11,6 @@ var question_list = ['Do you value others\' well being above your own?', 'Are yo
 
 for(var i=0; i<(temp_list.length); i++) {
     char_list.push({
-        '
         'title': temp_list[i],
         'question': question_list[i]
     });
