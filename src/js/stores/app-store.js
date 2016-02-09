@@ -6,6 +6,7 @@ var CHANGE_EVENT = 'change';
 
 var char_list = [];
 var answer_titles = [];
+
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.'] 
 var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable']
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?']
@@ -17,6 +18,7 @@ for(var i=0; i<(temp_list.length); i++) {
         'title': temp_list[i],
         'question': question_list[i]
     });
+    
     answer_titles.push({
         'stage': 1,
         'title': temp_titles[i],
@@ -40,6 +42,20 @@ function addChar(item, list) {
         item['inList'] = true;
         list.push(item);
     }
+}
+
+//stage 3 calculating compatibility
+function sum(item) {
+    for (var i=0; i<item.length; i++) {
+        var j += item.id;
+    };
+    return j;
+}
+
+function percentCompatible(intValue1, intValue2) {
+    var total = 50;
+    var percent = (intValue1 + intValue2) / total;
+    return percent;
 }
 
 var AppStore = assign(EventEmitter.prototype, {
