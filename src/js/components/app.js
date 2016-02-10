@@ -5,13 +5,15 @@ var CharCart = require('./app-charcart.js');
 var AppStore = require('../stores/app-store.js');
 var CharQuestion = require('./app-charquestions.js');
 var CharAnswers = require('./app-charanswers.js');
-
+var Compatibility = require('./app-compatibility.js');
 
 var App = React.createClass({
     getInitialState: function() {
         return {
             currState: 1,
             stage: 0,
+            end: 0,
+            showResults: true,
             title: GameTitles, 
             body: CharList, 
             misc: CharCart
@@ -28,6 +30,7 @@ var App = React.createClass({
                 this.setState({ currState: this.state.currState + 1 });
                 if (this.state.currState == 5) {
                     this.setState({ 
+                        currState: 1,  
                         stage: this.state.stage + 1,
                         body: CharQuestion,                               
                         misc: CharAnswers
@@ -35,8 +38,16 @@ var App = React.createClass({
                 };
                 break;
             case 1:
-                break;
-            case 2:
+                this.setState({ currState: this.state.currState + 1});
+                if (this.state.currState == 5) {
+                    this.setState({
+                        end: AppStore.getSum(),
+                        showResults: false,
+                        stage: this.state.stage + 1,
+                        body: Compatibility,
+                        misc: null 
+                    });
+                };
                 break;
         }
     },
@@ -44,8 +55,8 @@ var App = React.createClass({
         return (
             <div>
                 <div><this.state.title stage={this.state.stage} /></div>
-                <div><this.state.body /></div>
-                <div><this.state.misc /></div>
+                <div><this.state.body key={this.state.end} /></div>
+                <div>{this.state.showResults ? <this.state.misc /> : null }</div>
             </div>
         )
     }

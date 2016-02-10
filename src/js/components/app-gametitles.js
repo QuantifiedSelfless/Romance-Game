@@ -15,4 +15,4 @@ var GameTitles = React.createClass({
 
 });
 
-module.exports = GameTitles
+module.exports = GameTitles;
