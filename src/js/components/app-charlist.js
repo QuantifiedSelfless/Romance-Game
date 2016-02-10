@@ -10,9 +10,9 @@ var CharList = React.createClass({
     },
     
     render: function() {
-        var items = this.state.items.map(function (item) {
+        var items = this.state.items.map(function (item, i) {
             return (
-                <AddToList item={item} /> 
+                <AddToList item={item} key={i}/> 
             );
         });
     

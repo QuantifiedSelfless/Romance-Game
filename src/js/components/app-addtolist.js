@@ -12,7 +12,7 @@ var AddToList = React.createClass({
 
     render: function() {
         return (
-            <button onClick={this.handler} key={this.props.item.id}>{this.props.item.title}</button>);
+            <button onClick={this.handler} key={this.props.key}>{this.props.item.title}</button>);
     }
     
 });

@@ -8,9 +8,9 @@ CharAnswers = React.createClass({
         return { items: AppStore.getAnswerTitles() }
     },
     render: function() {
-        var items = this.state.items.map( function(item) {
+        var items = this.state.items.map( function(item, i) {
             return (
-                <AddToList item={item} />
+                <AddToList item={item} key={i}/>
             );
         });
         return  (

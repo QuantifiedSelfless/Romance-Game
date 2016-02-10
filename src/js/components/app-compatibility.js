@@ -2,12 +2,9 @@ React = require('react');
 AppStore = require('../stores/app-store.js');
 
 var Compatibility = React.createClass({
-    getInitialState: function() {
-        return { key: this.props.key }
-    },
-    render: function() {
+    render: function() { 
         return (
-                <h1>"Thanks for playing! You are" + {this.state.key} + " percent compatible"</h1>
+                <h1>{"You are " + this.props.stuff + " percent compatible."}</h1>
         )
     }
 });

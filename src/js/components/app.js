@@ -45,7 +45,6 @@ var App = React.createClass({
                         showResults: false,
                         stage: this.state.stage + 1,
                         body: Compatibility,
-                        misc: null 
                     });
                 };
                 break;
@@ -55,7 +54,7 @@ var App = React.createClass({
         return (
             <div>
                 <div><this.state.title stage={this.state.stage} /></div>
-                <div><this.state.body key={this.state.end} /></div>
+                <div><this.state.body stuff={this.state.end} /></div>
                 <div>{this.state.showResults ? <this.state.misc /> : null }</div>
             </div>
         )
