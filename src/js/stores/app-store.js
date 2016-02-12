@@ -1,3 +1,4 @@
+'use strict';
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
@@ -23,9 +24,52 @@ for(var i=0; i<(temp_list.length); i++) {
     answer_titles.push({
         'id': i + 1,
         'stage': 1,
-        'title': temp_titles[i],
+        'title': temp_titles[i]
     });
 }
+class player {
+    constructor(id, active) {
+        this.id = 'player' + id;
+        this.stage =  0;
+        this.active = active;
+        this.characteristics = [];
+        this.questions = [];
+    }
+    addToList(item, thisList) {
+        if (!item.inList) {
+            item['inList'] = true;
+            thisList.push(item);
+
+        }
+    }
+    removeFromList(index, thisList) {
+        thisList[index].inList = false;     
+        thisList.splice(index, 1);
+    }
+    isActive() {
+        return this.active;
+    }
+    setInactive() {
+        this.active = false;
+    }
+    activeStage() {
+        return this.stage;
+    }
+    setStage(intValue) {
+        this.Stage = intValue;
+    }
+    activeList() {
+        if (!this.Stage) {
+            return this.characteristics;
+        }
+        else {
+            return this.questions 
+        }
+    }
+}
+
+var Player_1 = new player(1, true);
+var Player_2 = new player(2, false);
 
 //arrays to keep track of user answers
 var cart_items = []; //stage 1
@@ -78,8 +122,9 @@ var AppStore = assign(EventEmitter.prototype, {
     getTitles: function() {
         return title_list
     }, 
-    getCart: function() {
-        return cart_items
+    getStageList: function() {
+        let active = Player_1.isActive() ? Player_1 : Player_2;
+        return active.activeList();
     },
     getChar: function() {
         return char_list
@@ -90,18 +135,25 @@ var AppStore = assign(EventEmitter.prototype, {
     },
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
+        let active = Player_1.isActive() ? Player_1 : Player_2; 
         switch(action.actionType) {
             case "ADD_CHAR":
-                if (!payload.action.item.stage) {
-                    addChar(payload.action.item, cart_items);
-                }
-                else {  
-                    addChar(payload.action.item, answer_items);
+                if (!active.activeStage()) {
+                    active.addToList(payload.action.item, active.activeList()); 
+                //if (!payload.action.item.stage) {
+                    //addChar(payload.action.item, cart_items);    
+                //}
+                //if (!active.activeStage()) {
+                //    active.addToList(payload.action.item, characteristics)
+                //}
+                //else {  
+                //    active.addToList(payload.action.item, questions);
+                //}
                 }
                 break;
 
             case "REMOVE_CHAR":
-                removeChar(payload.action.index);
+                active.removeFromList(payload.action.item, active.activeList()); 
                 break;
         }
 

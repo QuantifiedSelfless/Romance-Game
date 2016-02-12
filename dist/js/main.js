@@ -19657,7 +19657,7 @@ var AddToList = React.createClass({displayName: "AddToList",
 
     render: function() {
         return (
-            React.createElement("button", {onClick: this.handler, key: this.props.item.id}, this.props.item.title));
+            React.createElement("button", {onClick: this.handler, key: this.props.key}, this.props.item.title));
     }
     
 });
@@ -19675,9 +19675,9 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
         return { items: AppStore.getAnswerTitles() }
     },
     render: function() {
-        var items = this.state.items.map( function(item) {
+        var items = this.state.items.map( function(item, i) {
             return (
-                React.createElement(AddToList, {item: item})
+                React.createElement(AddToList, {item: item, key: i})
             );
         });
         return  (
@@ -19694,19 +19694,22 @@ module.exports = CharAnswers;
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
-var AppActions = require('../actions/app-actions.js')
+var AppActions = require('../actions/app-actions.js');
 
 
 
 var CharCart = React.createClass({displayName: "CharCart",
     getInitialState: function() {
-        return {items: AppStore.getCart()};
+        return {items: AppStore.getStageList()};
     },
     componentWillMount: function() {
         AppStore.addChangeListener(this._onChange)
     },
+    componentWillUnmount: function() {
+        AppStore.removeChangeListener(this._onChange)
+    },
     _onChange: function() {
-        this.setState({ items: AppStore.getCart() });
+        this.setState({ items: AppStore.getStageList() });
     },
     render: function() {
         var items = this.state.items.map(function(item, i) {
@@ -19748,9 +19751,9 @@ var CharList = React.createClass({displayName: "CharList",
     },
     
     render: function() {
-        var items = this.state.items.map(function (item) {
+        var items = this.state.items.map(function (item, i) {
             return (
-                React.createElement(AddToList, {item: item}) 
+                React.createElement(AddToList, {item: item, key: i}) 
             );
         });
     
@@ -19801,12 +19804,9 @@ React = require('react');
 AppStore = require('../stores/app-store.js');
 
 var Compatibility = React.createClass({displayName: "Compatibility",
-    getInitialState: function() {
-        return { key: this.props.key }
-    },
-    render: function() {
+    render: function() { 
         return (
-                React.createElement("h1", null, "\"Thanks for playing! You are\" + ", this.state.key, " + \" percent compatible\"")
+                React.createElement("h1", null, "You are " + this.props.stuff + " percent compatible.")
         )
     }
 });
@@ -19896,7 +19896,6 @@ var App = React.createClass({displayName: "App",
                         showResults: false,
                         stage: this.state.stage + 1,
                         body: Compatibility,
-                        misc: null 
                     });
                 };
                 break;
@@ -19906,7 +19905,7 @@ var App = React.createClass({displayName: "App",
         return (
             React.createElement("div", null, 
                 React.createElement("div", null, React.createElement(this.state.title, {stage: this.state.stage})), 
-                React.createElement("div", null, React.createElement(this.state.body, {key: this.state.end})), 
+                React.createElement("div", null, React.createElement(this.state.body, {stuff: this.state.end})), 
                 React.createElement("div", null, this.state.showResults ? React.createElement(this.state.misc, null) : null)
             )
         )
@@ -19938,6 +19937,7 @@ var ReactDOM = require('react-dom');
 ReactDOM.render(React.createElement(App, null), document.getElementById('main'));
 
 },{"./components/app":172,"react-dom":6}],175:[function(require,module,exports){
+'use strict';
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
@@ -19947,7 +19947,7 @@ var CHANGE_EVENT = 'change';
 var char_list = [];
 var answer_titles = [];
 
-var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
+var title_list = ['Please choose 5 personalities you value the most in a fuck buddy.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
 var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable']
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
 var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree']
@@ -19963,9 +19963,52 @@ for(var i=0; i<(temp_list.length); i++) {
     answer_titles.push({
         'id': i + 1,
         'stage': 1,
-        'title': temp_titles[i],
+        'title': temp_titles[i]
     });
 }
+class player {
+    constructor(id, active) {
+        this.id = 'player' + id;
+        this.stage =  0;
+        this.active = active;
+        this.characteristics = [];
+        this.questions = [];
+    }
+    addToList(item, thisList) {
+        if (!item.inList) {
+            item['inList'] = true;
+            thisList.push(item);
+
+        }
+    }
+    removeFromList(index, thisList) {
+        thisList[index].inList = false;     
+        thisList.splice(index, 1);
+    }
+    isActive() {
+        return this.active;
+    }
+    setInactive() {
+        this.active = false;
+    }
+    activeStage() {
+        return this.stage;
+    }
+    setStage(intValue) {
+        this.Stage = intValue;
+    }
+    activeList() {
+        if (!this.Stage) {
+            return this.characteristics;
+        }
+        else {
+            return this.questions 
+        }
+    }
+}
+
+var Player_1 = new player(1, true);
+var Player_2 = new player(2, false);
 
 //arrays to keep track of user answers
 var cart_items = []; //stage 1
@@ -19989,7 +20032,6 @@ function addChar(item, list) {
 //stage 3 calculating compatibility
 function sum(item) {
     var j = 0;
-    console.log(item.length);
     for (var i=0; i<item.length; i++) {
         j += item[i].id;
     }
@@ -20019,29 +20061,38 @@ var AppStore = assign(EventEmitter.prototype, {
     getTitles: function() {
         return title_list
     }, 
-    getCart: function() {
-        return cart_items
+    getStageList: function() {
+        let active = Player_1.isActive() ? Player_1 : Player_2;
+        return active.activeList();
     },
     getChar: function() {
         return char_list
     },
     getSum: function() {
+        console.log(sum(answer_items));
         return sum(answer_items)
     },
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
+        let active = Player_1.isActive() ? Player_1 : Player_2; 
         switch(action.actionType) {
             case "ADD_CHAR":
-                if (!payload.action.item.stage) {
-                    addChar(payload.action.item, cart_items);
-                }
-                else {  
-                    addChar(payload.action.item, answer_items);
+                if (!active.activeStage()) {
+                    active.addToList(payload.action.item, active.activeList()); 
+                //if (!payload.action.item.stage) {
+                    //addChar(payload.action.item, cart_items);    
+                //}
+                //if (!active.activeStage()) {
+                //    active.addToList(payload.action.item, characteristics)
+                //}
+                //else {  
+                //    active.addToList(payload.action.item, questions);
+                //}
                 }
                 break;
 
             case "REMOVE_CHAR":
-                removeChar(payload.action.index);
+                active.removeFromList(payload.action.item, active.activeList()); 
                 break;
         }
 

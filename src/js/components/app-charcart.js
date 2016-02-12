@@ -7,7 +7,7 @@ var AppActions = require('../actions/app-actions.js');
 
 var CharCart = React.createClass({
     getInitialState: function() {
-        return {items: AppStore.getCart()};
+        return {items: AppStore.getStageList()};
     },
     componentWillMount: function() {
         AppStore.addChangeListener(this._onChange)
@@ -16,7 +16,7 @@ var CharCart = React.createClass({
         AppStore.removeChangeListener(this._onChange)
     },
     _onChange: function() {
-        this.setState({ items: AppStore.getCart() });
+        this.setState({ items: AppStore.getStageList() });
     },
     render: function() {
         var items = this.state.items.map(function(item, i) {
