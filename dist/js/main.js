@@ -19782,11 +19782,20 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
         AppStore.addChangeListener(this._onChange)
     },
     _onChange: function() {
-        this.setState({ question: this.state.question + 1});
+        if (this.state.question < 5) { 
+            this.setState({ 
+                question: this.state.question + 1,
+            });
+        }
+        else {
+            this.setState({
+                question: 0,
+                items: AppStore.getChar()
+            });
+        }
     },
     render: function() {
         var items = this.state.items.map(function (item) {
-            item['stage'] = '1';  
             return (
                 item.question
             );
