@@ -34,78 +34,59 @@ class player {
         this.active = active;
         this.characteristics = [];
         this.questions = [];
+        this.sum = 0;
     }
     addToList(item, thisList) {
         if (!item.inList) {
             item['inList'] = true;
             thisList.push(item);
-
         }
     }
     removeFromList(index, thisList) {
-        thisList[index].inList = false;     
+        thisList[0]['inList'] = false;
         thisList.splice(index, 1);
     }
     isActive() {
         return this.active;
     }
-    setInactive() {
-        this.active = false;
+    flipActive() {
+        if (this.active) {
+            this.addStage();
+        }
+        for (var i=0; i<char_list.length; i++) {
+            char_list[i]['inList'] = false; 
+        }
+        this.active = !this.active;
     }
     activeStage() {
         return this.stage;
     }
-    setStage(intValue) {
-        this.Stage = intValue;
+    addStage() {
+        this.stage += 1;
     }
     activeList() {
-        if (!this.Stage) {
+        if (!this.stage) {
             return this.characteristics;
         }
         else {
-            return this.questions 
+            return this.questions;
         }
+    }
+    sumList() {
+        for (var i=0; i<(this.questions.length); i++) {
+           this.sum += this.questions[i].id;
+        }
+        return this.sum;
     }
 }
 
 var Player_1 = new player(1, true);
 var Player_2 = new player(2, false);
 
-//arrays to keep track of user answers
-var cart_items = []; //stage 1
-var answer_items = []; //stage 2
-
-//stage 1 remove from cart
-function removeChar(index) {
-    cart_items[index].inList = false;
-    cart_items.splice(index, 1); 
+function activePlayer() {
+    var player = Player_1.isActive() ? Player_1 : Player_2;
+    return player;
 }
-
-//stage 1, 2 keeping track of characteristics choosen, in addition to answers to the
-//stage 2 questions
-function addChar(item, list) {
-    if(!item.inList) {
-        item['inList'] = true;
-        list.push(item);
-    }
-}
-
-//stage 3 calculating compatibility
-function sum(item) {
-    var j = 0;
-    for (var i=0; i<item.length; i++) {
-        j += item[i].id;
-    }
-    console.log(j);
-    return j
-}
-
-function percentCompatible(intValue1, intValue2) {
-    var total = 50;
-    var percent = (intValue1 + intValue2) / total;
-    return percent
-}
-
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function() {
         this.emit(CHANGE_EVENT)
@@ -122,38 +103,33 @@ var AppStore = assign(EventEmitter.prototype, {
     getTitles: function() {
         return title_list
     }, 
-    getStageList: function() {
-        let active = Player_1.isActive() ? Player_1 : Player_2;
-        return active.activeList();
-    },
     getChar: function() {
         return char_list
     },
+    switchPlayer: function() {
+        Player_1.flipActive();
+        Player_2.flipActive();
+        return Player_1.isActive();
+    },
+    getStageList: function() {
+        var player = activePlayer();
+        return player.activeList();
+    },
     getSum: function() {
-        console.log(sum(answer_items));
-        return sum(answer_items)
+        var player = activePlayer();
+        return player.sumList()
     },
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
-        let active = Player_1.isActive() ? Player_1 : Player_2; 
+        var player = activePlayer();
+        console.log(player);
         switch(action.actionType) {
             case "ADD_CHAR":
-                if (!active.activeStage()) {
-                    active.addToList(payload.action.item, active.activeList()); 
-                //if (!payload.action.item.stage) {
-                    //addChar(payload.action.item, cart_items);    
-                //}
-                //if (!active.activeStage()) {
-                //    active.addToList(payload.action.item, characteristics)
-                //}
-                //else {  
-                //    active.addToList(payload.action.item, questions);
-                //}
-                }
+                player.addToList(payload.action.item, player.activeList());  
                 break;
 
             case "REMOVE_CHAR":
-                active.removeFromList(payload.action.item, active.activeList()); 
+                player.removeFromList(payload.action.item, player.activeList()); 
                 break;
         }
 
