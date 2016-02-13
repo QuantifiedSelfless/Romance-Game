@@ -19782,7 +19782,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
         AppStore.addChangeListener(this._onChange)
     },
     _onChange: function() {
-        if (this.state.question < 5) { 
+        if (this.state.question < 4) { 
             this.setState({ 
                 question: this.state.question + 1,
             });
