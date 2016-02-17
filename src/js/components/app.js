@@ -6,10 +6,12 @@ var AppStore = require('../stores/app-store.js');
 var CharQuestion = require('./app-charquestions.js');
 var CharAnswers = require('./app-charanswers.js');
 var Compatibility = require('./app-compatibility.js');
+var PlayerPick = require('./app-playerpick.js');
 
 var App = React.createClass({
     getInitialState: function() {
         return {
+            currPlayer: 1,
             currState: 1,
             stage: 0,
             end: 0,
@@ -28,15 +30,17 @@ var App = React.createClass({
         switch(this.state.stage) {
             case 0:
                 this.setState({ currState: this.state.currState + 1 });
-                if (this.state.currState == 5) {
+                if (this.state.currState == 6) {
                     if (!AppStore.switchPlayer()) {
                         this.setState({
+                            currPlayer: 0,
                             currState: 1,
                         });
                         break;
                     }
                     else { 
                         this.setState({ 
+                            currPlayer: 1,
                             currState: 1,  
                             stage: this.state.stage + 1,
                             body: CharQuestion, 
@@ -50,11 +54,13 @@ var App = React.createClass({
                 if (this.state.currState == 5) {
                     if (!AppStore.switchPlayer()) {
                         this.setState({
-                            currState: 1,
+                            currState: 0,
+                            currPlayer: 1,
                         });
                     }
                     else {
                         this.setState({
+                            currPlayer: 1,
                             end: AppStore.getSum(),
                             showResults: false,
                             stage: this.state.stage + 1,
@@ -68,9 +74,15 @@ var App = React.createClass({
     render: function() {
         return (
             <div>
-                <div><this.state.title stage={this.state.stage} /></div>
-                <div><this.state.body stuff={this.state.end} /></div>
-                <div>{this.state.showResults ? <this.state.misc /> : null }</div>
+                <div>
+                    <div className="titles">
+                        <img className="logo-container" src="../src/js/img/Yellow-Tree-logo.png"></img>
+                        <this.state.title stage={this.state.stage} />
+                    </div>
+                    <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer}/> : null}</div>
+                    <div><this.state.body stuff={this.state.end} /></div>
+                </div>
+                <div>{this.state.showResults ? <this.state.misc /> : null}</div>
             </div>
         )
     }

@@ -12,7 +12,8 @@ var AddToList = React.createClass({
 
     render: function() {
         return (
-            <button onClick={this.handler} key={this.props.key}>{this.props.item.title}</button>);
+            <div className="col-2 center button-spacing"><button className="btn btn-primary" onClick={this.handler} key={this.props.key}>{this.props.item.title}</button></div>
+        );
     }
     
 });

@@ -6,7 +6,7 @@ var RemoveFromList = React.createClass({
         AppActions.removeChar(this.props.index)
     },
     render: function() {
-        return <h1 onClick={this.handler}>x</h1>
+        return <div className="center" onClick={this.handler}>x</div>
     }
 });
 

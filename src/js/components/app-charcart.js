@@ -21,25 +21,22 @@ var CharCart = React.createClass({
     render: function() {
         var items = this.state.items.map(function(item, i) {
             return (
-                <tr key={i}>
-                    <td> <RemoveFromList index={i} /> </td>
-                    <td> {item.title} </td>
-                </tr>
-            );
-    })
+                <div className="col-2 left overflow-hidden">
+                    <div className="btn-primary overflow-hidden mr4">
+                        <div className="left remove"> <RemoveFromList index={i} /> </div>
+                        <div className="center px2"> {item.title} </div>
+                    </div>
+                </div>
+            );   
+        })
     return (
-        <table className="table table-hover">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Sarah Rocks</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div className="choosen">
+            <h3>Choosen Characteristics</h3> 
+            <div className="clearfix">
                 {items}
-            </tbody>
-        </table>
-        )
+            </div>
+        </div>
+    )
     }
 });
 

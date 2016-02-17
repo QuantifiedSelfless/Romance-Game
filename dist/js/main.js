@@ -19642,7 +19642,7 @@ var AppActions = {
 }
 module.exports = AppActions;
 
-},{"../dispatchers/app-dispatcher.js":173}],164:[function(require,module,exports){
+},{"../dispatchers/app-dispatcher.js":174}],164:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
@@ -19657,7 +19657,8 @@ var AddToList = React.createClass({displayName: "AddToList",
 
     render: function() {
         return (
-            React.createElement("button", {onClick: this.handler, key: this.props.key}, this.props.item.title));
+            React.createElement("div", {className: "col-2 center button-spacing"}, React.createElement("button", {className: "btn btn-primary", onClick: this.handler, key: this.props.key}, this.props.item.title))
+        );
     }
     
 });
@@ -19681,7 +19682,7 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
             );
         });
         return  (
-            React.createElement("div", null, 
+            React.createElement("div", {className: "flex justify"}, 
                 items
             )
         );
@@ -19690,7 +19691,7 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
 
 module.exports = CharAnswers;
 
-},{"../actions/app-actions.js":163,"../stores/app-store.js":175,"./app-addtolist.js":164,"react":162}],166:[function(require,module,exports){
+},{"../actions/app-actions.js":163,"../stores/app-store.js":176,"./app-addtolist.js":164,"react":162}],166:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
@@ -19714,31 +19715,28 @@ var CharCart = React.createClass({displayName: "CharCart",
     render: function() {
         var items = this.state.items.map(function(item, i) {
             return (
-                React.createElement("tr", {key: i}, 
-                    React.createElement("td", null, " ", React.createElement(RemoveFromList, {index: i}), " "), 
-                    React.createElement("td", null, " ", item.title, " ")
+                React.createElement("div", {className: "col-2 left overflow-hidden"}, 
+                    React.createElement("div", {className: "btn-primary overflow-hidden mr4"}, 
+                        React.createElement("div", {className: "left remove"}, " ", React.createElement(RemoveFromList, {index: i}), " "), 
+                        React.createElement("div", {className: "center px2"}, " ", item.title, " ")
+                    )
                 )
-            );
-    })
+            );   
+        })
     return (
-        React.createElement("table", {className: "table table-hover"}, 
-            React.createElement("thead", null, 
-                React.createElement("tr", null, 
-                    React.createElement("th", null), 
-                    React.createElement("th", null, "Sarah Rocks")
-                )
-            ), 
-            React.createElement("tbody", null, 
+        React.createElement("div", {className: "choosen"}, 
+            React.createElement("h3", null, "Choosen Characteristics"), 
+            React.createElement("div", {className: "clearfix"}, 
                 items
             )
         )
-        )
+    )
     }
 });
 
 module.exports = CharCart
 
-},{"../actions/app-actions.js":163,"../stores/app-store.js":175,"./app-removefromlist.js":171,"react":162}],167:[function(require,module,exports){
+},{"../actions/app-actions.js":163,"../stores/app-store.js":176,"./app-removefromlist.js":172,"react":162}],167:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
@@ -19758,7 +19756,7 @@ var CharList = React.createClass({displayName: "CharList",
         });
     
         return (
-            React.createElement("div", null, 
+            React.createElement("div", {className: "flex flex-wrap charlist"}, 
                 items
             )
         )
@@ -19767,7 +19765,7 @@ var CharList = React.createClass({displayName: "CharList",
 
 module.exports = CharList
 
-},{"../stores/app-store.js":175,"./app-addtolist.js":164,"react":162}],168:[function(require,module,exports){
+},{"../stores/app-store.js":176,"./app-addtolist.js":164,"react":162}],168:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
@@ -19796,6 +19794,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
     },
     render: function() {
         var items = this.state.items.map(function (item) {
+            item['stage'] = 1;
             return (
                 item.question
             );
@@ -19808,7 +19807,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
 
 module.exports = CharQuestion;
 
-},{"../stores/app-store.js":175,"react":162}],169:[function(require,module,exports){
+},{"../stores/app-store.js":176,"react":162}],169:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
@@ -19822,7 +19821,7 @@ var Compatibility = React.createClass({displayName: "Compatibility",
 
 module.exports = Compatibility;
 
-},{"../stores/app-store.js":175,"react":162}],170:[function(require,module,exports){
+},{"../stores/app-store.js":176,"react":162}],170:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
     
@@ -19842,7 +19841,20 @@ var GameTitles = React.createClass({displayName: "GameTitles",
 
 module.exports = GameTitles;
 
-},{"../stores/app-store.js":175,"react":162}],171:[function(require,module,exports){
+},{"../stores/app-store.js":176,"react":162}],171:[function(require,module,exports){
+React = require('react')
+
+var PlayerPick = React.createClass({displayName: "PlayerPick", 
+    render: function() {
+        return (
+            React.createElement("h3", {className: "center mr4"}, this.props.stuff ? "Player 1 is currently picking" : "Player 2 is currently picking")
+        )
+    }
+});
+
+module.exports = PlayerPick;
+
+},{"react":162}],172:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
@@ -19851,13 +19863,13 @@ var RemoveFromList = React.createClass({displayName: "RemoveFromList",
         AppActions.removeChar(this.props.index)
     },
     render: function() {
-        return React.createElement("h1", {onClick: this.handler}, "x")
+        return React.createElement("div", {className: "center", onClick: this.handler}, "x")
     }
 });
 
 module.exports = RemoveFromList;
 
-},{"../actions/app-actions.js":163,"react":162}],172:[function(require,module,exports){
+},{"../actions/app-actions.js":163,"react":162}],173:[function(require,module,exports){
 var React = require('react');
 var CharList = require('./app-charlist.js');
 var GameTitles = require('./app-gametitles.js');
@@ -19866,10 +19878,12 @@ var AppStore = require('../stores/app-store.js');
 var CharQuestion = require('./app-charquestions.js');
 var CharAnswers = require('./app-charanswers.js');
 var Compatibility = require('./app-compatibility.js');
+var PlayerPick = require('./app-playerpick.js');
 
 var App = React.createClass({displayName: "App",
     getInitialState: function() {
         return {
+            currPlayer: 1,
             currState: 1,
             stage: 0,
             end: 0,
@@ -19888,15 +19902,17 @@ var App = React.createClass({displayName: "App",
         switch(this.state.stage) {
             case 0:
                 this.setState({ currState: this.state.currState + 1 });
-                if (this.state.currState == 5) {
+                if (this.state.currState == 6) {
                     if (!AppStore.switchPlayer()) {
                         this.setState({
+                            currPlayer: 0,
                             currState: 1,
                         });
                         break;
                     }
                     else { 
                         this.setState({ 
+                            currPlayer: 1,
                             currState: 1,  
                             stage: this.state.stage + 1,
                             body: CharQuestion, 
@@ -19910,11 +19926,13 @@ var App = React.createClass({displayName: "App",
                 if (this.state.currState == 5) {
                     if (!AppStore.switchPlayer()) {
                         this.setState({
-                            currState: 1,
+                            currState: 0,
+                            currPlayer: 1,
                         });
                     }
                     else {
                         this.setState({
+                            currPlayer: 1,
                             end: AppStore.getSum(),
                             showResults: false,
                             stage: this.state.stage + 1,
@@ -19928,8 +19946,14 @@ var App = React.createClass({displayName: "App",
     render: function() {
         return (
             React.createElement("div", null, 
-                React.createElement("div", null, React.createElement(this.state.title, {stage: this.state.stage})), 
-                React.createElement("div", null, React.createElement(this.state.body, {stuff: this.state.end})), 
+                React.createElement("div", null, 
+                    React.createElement("div", {className: "titles"}, 
+                        React.createElement("img", {className: "logo-container", src: "../src/js/img/Yellow-Tree-logo.png"}), 
+                        React.createElement(this.state.title, {stage: this.state.stage})
+                    ), 
+                    React.createElement("div", null, this.state.showResults ? React.createElement(PlayerPick, {stuff: this.state.currPlayer}) : null), 
+                    React.createElement("div", null, React.createElement(this.state.body, {stuff: this.state.end}))
+                ), 
                 React.createElement("div", null, this.state.showResults ? React.createElement(this.state.misc, null) : null)
             )
         )
@@ -19938,7 +19962,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"../stores/app-store.js":175,"./app-charanswers.js":165,"./app-charcart.js":166,"./app-charlist.js":167,"./app-charquestions.js":168,"./app-compatibility.js":169,"./app-gametitles.js":170,"react":162}],173:[function(require,module,exports){
+},{"../stores/app-store.js":176,"./app-charanswers.js":165,"./app-charcart.js":166,"./app-charlist.js":167,"./app-charquestions.js":168,"./app-compatibility.js":169,"./app-gametitles.js":170,"./app-playerpick.js":171,"react":162}],174:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
@@ -19954,13 +19978,13 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":3,"react/lib/Object.assign":28}],174:[function(require,module,exports){
+},{"flux":3,"react/lib/Object.assign":28}],175:[function(require,module,exports){
 var App = require('./components/app');
 var ReactDOM = require('react-dom');
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('main'));
 
-},{"./components/app":172,"react-dom":6}],175:[function(require,module,exports){
+},{"./components/app":173,"react-dom":6}],176:[function(require,module,exports){
 'use strict';
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
@@ -19971,8 +19995,8 @@ var CHANGE_EVENT = 'change';
 var char_list = [];
 var answer_titles = [];
 
-var title_list = ['Please choose 5 personalities you value the most in a fuck buddy.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
-var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable']
+var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
+var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable', 'Disciplined', 'Deep', 'Elegent', 'Extraordinary', 'Freethinking', 'Generous', 'Hardworking', 'Loyal', 'Optimistic', 'Responsible', 'Romantic']
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
 var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree']
 
@@ -19983,7 +20007,8 @@ for(var i=0; i<(temp_list.length); i++) {
         'title': temp_list[i],
         'question': question_list[i]
     });
-    
+}    
+for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
         'id': i + 1,
         'stage': 1,
@@ -20085,7 +20110,6 @@ var AppStore = assign(EventEmitter.prototype, {
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
         var player = activePlayer();
-        console.log(player);
         switch(action.actionType) {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
@@ -20104,4 +20128,4 @@ var AppStore = assign(EventEmitter.prototype, {
 
 module.exports = AppStore;
 
-},{"../dispatchers/app-dispatcher.js":173,"events":1,"react/lib/Object.assign":28}]},{},[174]);
+},{"../dispatchers/app-dispatcher.js":174,"events":1,"react/lib/Object.assign":28}]},{},[175]);

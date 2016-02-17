@@ -26,6 +26,7 @@ CharQuestion = React.createClass({
     },
     render: function() {
         var items = this.state.items.map(function (item) {
+            item['stage'] = 1;
             return (
                 item.question
             );
