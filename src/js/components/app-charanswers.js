@@ -14,7 +14,7 @@ CharAnswers = React.createClass({
             );
         });
         return  (
-            <div className="flex justify">
+            <div className="flex justify field">
                 {items}
             </div>
         );

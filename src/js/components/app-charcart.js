@@ -21,7 +21,7 @@ var CharCart = React.createClass({
     render: function() {
         var items = this.state.items.map(function(item, i) {
             return (
-                <div className="col-2 left overflow-hidden">
+                <div className="col-2 left overflow-hidden" key={i}>
                     <div className="btn-primary overflow-hidden mr4">
                         <div className="left remove"> <RemoveFromList index={i} /> </div>
                         <div className="center px2"> {item.title} </div>
@@ -32,7 +32,7 @@ var CharCart = React.createClass({
     return (
         <div className="choosen">
             <h3>Choosen Characteristics</h3> 
-            <div className="clearfix">
+            <div className="clearfix field">
                 {items}
             </div>
         </div>

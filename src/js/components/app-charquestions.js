@@ -32,7 +32,7 @@ CharQuestion = React.createClass({
             );
         }); 
         return (
-                <h1>{items[this.state.question]}</h1>
+                <h1 className="charquestion bold title-font">{items[this.state.question]}</h1>
         );
     }
 });

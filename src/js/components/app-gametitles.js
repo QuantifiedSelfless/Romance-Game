@@ -9,7 +9,7 @@ var GameTitles = React.createClass({
 
     render: function() { 
         return (
-            <h1>{this.state.titles[this.props.stage]}</h1>
+            <h1 className="title-font">{this.state.titles[this.props.stage]}</h1>
         )
     }
 

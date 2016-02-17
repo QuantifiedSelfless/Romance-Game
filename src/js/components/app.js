@@ -18,7 +18,8 @@ var App = React.createClass({
             showResults: true,
             title: GameTitles, 
             body: CharList, 
-            misc: CharCart
+            misc: CharCart,
+            playerlist: []
         } 
     },
 
@@ -27,48 +28,54 @@ var App = React.createClass({
     },
 
     _onChange: function() {
-        switch(this.state.stage) {
-            case 0:
-                this.setState({ currState: this.state.currState + 1 });
-                if (this.state.currState == 6) {
-                    if (!AppStore.switchPlayer()) {
-                        this.setState({
-                            currPlayer: 0,
-                            currState: 1,
-                        });
-                        break;
-                    }
-                    else { 
-                        this.setState({ 
-                            currPlayer: 1,
-                            currState: 1,  
-                            stage: this.state.stage + 1,
-                            body: CharQuestion, 
-                            misc: CharAnswers
-                        });
-                    }
-                };
-                break;
-            case 1:
-                this.setState({ currState: this.state.currState + 1});
-                if (this.state.currState == 5) {
-                    if (!AppStore.switchPlayer()) {
-                        this.setState({
-                            currState: 0,
-                            currPlayer: 1,
-                        });
-                    }
-                    else {
-                        this.setState({
-                            currPlayer: 1,
-                            end: AppStore.getSum(),
-                            showResults: false,
-                            stage: this.state.stage + 1,
-                            body: Compatibility,
-                        });
-                    }
-                };
-                break;
+        if (this.state.playerlist.length < AppStore.getStageList().length) { 
+            switch(this.state.stage) {
+                case 0:
+                    this.setState({ currState: this.state.currState + 1 });
+                    console.log(this.state.currState);
+                    if (this.state.currState == 6) {
+                        if (!AppStore.switchPlayer()) {
+                            this.setState({
+                                currPlayer: 0,
+                                currState: 1,
+                            });
+                            break;
+                        }
+                        else { 
+                            this.setState({ 
+                                currPlayer: 1,
+                                currState: 1,  
+                                stage: this.state.stage + 1,
+                                body: CharQuestion, 
+                                misc: CharAnswers
+                            });
+                        }
+                    };
+                    break;
+                case 1:
+                    console.log(this.state.currState)
+                    this.setState({ currState: this.state.currState + 1});
+                    if (this.state.currState == 5) {
+                        if (!AppStore.switchPlayer()) {
+                            this.setState({
+                                currState: 1,
+                                currPlayer: 1,
+                            });
+                        }
+                        else {
+                            this.setState({
+                                end: AppStore.getSum(),
+                                showResults: false,
+                                stage: this.state.stage + 1,
+                                body: Compatibility,
+                            });
+                        }
+                    };
+                    break;
+                }
+        }
+        else {
+            this.setState({ playerlist: AppStore.getStageList() });
         }
     },
     render: function() {

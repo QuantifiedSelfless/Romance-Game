@@ -19663,7 +19663,7 @@ var AddToList = React.createClass({displayName: "AddToList",
     
 });
 
-module.exports = AddToList;
+module.exports = AddToList; 
 
 },{"../actions/app-actions.js":163,"react":162}],165:[function(require,module,exports){
 React = require('react');
@@ -19682,7 +19682,7 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
             );
         });
         return  (
-            React.createElement("div", {className: "flex justify"}, 
+            React.createElement("div", {className: "flex justify field"}, 
                 items
             )
         );
@@ -19715,7 +19715,7 @@ var CharCart = React.createClass({displayName: "CharCart",
     render: function() {
         var items = this.state.items.map(function(item, i) {
             return (
-                React.createElement("div", {className: "col-2 left overflow-hidden"}, 
+                React.createElement("div", {className: "col-2 left overflow-hidden", key: i}, 
                     React.createElement("div", {className: "btn-primary overflow-hidden mr4"}, 
                         React.createElement("div", {className: "left remove"}, " ", React.createElement(RemoveFromList, {index: i}), " "), 
                         React.createElement("div", {className: "center px2"}, " ", item.title, " ")
@@ -19726,7 +19726,7 @@ var CharCart = React.createClass({displayName: "CharCart",
     return (
         React.createElement("div", {className: "choosen"}, 
             React.createElement("h3", null, "Choosen Characteristics"), 
-            React.createElement("div", {className: "clearfix"}, 
+            React.createElement("div", {className: "clearfix field"}, 
                 items
             )
         )
@@ -19756,7 +19756,7 @@ var CharList = React.createClass({displayName: "CharList",
         });
     
         return (
-            React.createElement("div", {className: "flex flex-wrap charlist"}, 
+            React.createElement("div", {className: "flex flex-wrap charlist field"}, 
                 items
             )
         )
@@ -19800,7 +19800,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
             );
         }); 
         return (
-                React.createElement("h1", null, items[this.state.question])
+                React.createElement("h1", {className: "charquestion bold title-font"}, items[this.state.question])
         );
     }
 });
@@ -19813,8 +19813,14 @@ AppStore = require('../stores/app-store.js');
 
 var Compatibility = React.createClass({displayName: "Compatibility",
     render: function() { 
+        var styles = {
+            width: this.props.stuff + '%'
+        } 
         return (
-                React.createElement("h1", null, "You are " + this.props.stuff + " percent compatible.")
+            //<h1>{"You are " + this.props.stuff + " percent compatible."}</h1>
+            React.createElement("div", {className: "meter"}, 
+                React.createElement("span", {style: styles})
+            )
         )
     }
 });
@@ -19833,7 +19839,7 @@ var GameTitles = React.createClass({displayName: "GameTitles",
 
     render: function() { 
         return (
-            React.createElement("h1", null, this.state.titles[this.props.stage])
+            React.createElement("h1", {className: "title-font"}, this.state.titles[this.props.stage])
         )
     }
 
@@ -19847,7 +19853,7 @@ React = require('react')
 var PlayerPick = React.createClass({displayName: "PlayerPick", 
     render: function() {
         return (
-            React.createElement("h3", {className: "center mr4"}, this.props.stuff ? "Player 1 is currently picking" : "Player 2 is currently picking")
+            React.createElement("h3", {className: "center mr4 italic"}, this.props.stuff ? "Player 1 is currently picking" : "Player 2 is currently picking")
         )
     }
 });
@@ -19890,7 +19896,8 @@ var App = React.createClass({displayName: "App",
             showResults: true,
             title: GameTitles, 
             body: CharList, 
-            misc: CharCart
+            misc: CharCart,
+            playerlist: []
         } 
     },
 
@@ -19899,48 +19906,54 @@ var App = React.createClass({displayName: "App",
     },
 
     _onChange: function() {
-        switch(this.state.stage) {
-            case 0:
-                this.setState({ currState: this.state.currState + 1 });
-                if (this.state.currState == 6) {
-                    if (!AppStore.switchPlayer()) {
-                        this.setState({
-                            currPlayer: 0,
-                            currState: 1,
-                        });
-                        break;
-                    }
-                    else { 
-                        this.setState({ 
-                            currPlayer: 1,
-                            currState: 1,  
-                            stage: this.state.stage + 1,
-                            body: CharQuestion, 
-                            misc: CharAnswers
-                        });
-                    }
-                };
-                break;
-            case 1:
-                this.setState({ currState: this.state.currState + 1});
-                if (this.state.currState == 5) {
-                    if (!AppStore.switchPlayer()) {
-                        this.setState({
-                            currState: 0,
-                            currPlayer: 1,
-                        });
-                    }
-                    else {
-                        this.setState({
-                            currPlayer: 1,
-                            end: AppStore.getSum(),
-                            showResults: false,
-                            stage: this.state.stage + 1,
-                            body: Compatibility,
-                        });
-                    }
-                };
-                break;
+        if (this.state.playerlist.length < AppStore.getStageList().length) { 
+            switch(this.state.stage) {
+                case 0:
+                    this.setState({ currState: this.state.currState + 1 });
+                    console.log(this.state.currState);
+                    if (this.state.currState == 6) {
+                        if (!AppStore.switchPlayer()) {
+                            this.setState({
+                                currPlayer: 0,
+                                currState: 1,
+                            });
+                            break;
+                        }
+                        else { 
+                            this.setState({ 
+                                currPlayer: 1,
+                                currState: 1,  
+                                stage: this.state.stage + 1,
+                                body: CharQuestion, 
+                                misc: CharAnswers
+                            });
+                        }
+                    };
+                    break;
+                case 1:
+                    console.log(this.state.currState)
+                    this.setState({ currState: this.state.currState + 1});
+                    if (this.state.currState == 5) {
+                        if (!AppStore.switchPlayer()) {
+                            this.setState({
+                                currState: 1,
+                                currPlayer: 1,
+                            });
+                        }
+                        else {
+                            this.setState({
+                                end: AppStore.getSum(),
+                                showResults: false,
+                                stage: this.state.stage + 1,
+                                body: Compatibility,
+                            });
+                        }
+                    };
+                    break;
+                }
+        }
+        else {
+            this.setState({ playerlist: AppStore.getStageList() });
         }
     },
     render: function() {

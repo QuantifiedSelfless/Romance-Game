@@ -17,7 +17,7 @@ var CharList = React.createClass({
         });
     
         return (
-            <div className="flex flex-wrap charlist">
+            <div className="flex flex-wrap charlist field">
                 {items}
             </div>
         )
