@@ -3,8 +3,6 @@ var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
 
-var CHANGE_EVENT = 'change';
-
 var char_list = [];
 var answer_titles = [];
 var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2']
@@ -99,7 +97,7 @@ var AppStore = assign(EventEmitter.prototype, {
         this.removeListener(change, callback);
     },
     currentPlayer: function() {
-        return activePlayer()
+        return !Player_1.isActive() ? 1 : 0;
     },
     getAnswerTitles: function() {
         return answer_titles;
@@ -132,17 +130,20 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
-                var active_list_length = player.activeStage() ? 5 : 10;
-                if (Player_1.isActive() && (player.activeList().length == active_list_length)) {
-                    AppStore.emitChange('flipscreen');
-                }
-                else if (player.activeList().length == active_list_length) {
-                    AppStore.emitChange('stage');
+                AppStore.emitChange('cart_update');
+                var active_list_length = !player.activeStage() ? 5 : 10;
+                if (player.activeList().length == active_list_length) {
+                    AppStore.emitChange('switch_to_flipscreen');
                 }
                 break;
 
             case "REMOVE_CHAR":
                 player.removeFromList(payload.action.item, player.activeList()); 
+                AppStore.emitChange('cart_update');
+                break;
+
+            case "FLIP_SCREEN":
+                AppStore.emitChange('switch_from_flipscreen');
                 break;
         }
 

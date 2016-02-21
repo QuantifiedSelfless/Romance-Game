@@ -10,10 +10,10 @@ var CharCart = React.createClass({
         return {items: AppStore.getStageList()};
     },
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
+        AppStore.addChangeListener('cart_update', this._onChange);
     },
     componentWillUnmount: function() {
-        AppStore.removeChangeListener(this._onChange)
+        AppStore.removeChangeListener('cart_update', this._onChange)
     },
     _onChange: function() {
         this.setState({ items: AppStore.getStageList() });

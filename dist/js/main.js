@@ -19638,7 +19638,12 @@ var AppActions = {
             actionType: "REMOVE_CHAR",
             index: index,
         })
-    }
+    },
+    flipScreen: function() {
+        AppDispatcher.handleViewAction({
+            actionType: "FLIP_SCREEN",
+        })
+    },
 }
 module.exports = AppActions;
 
@@ -19647,9 +19652,6 @@ var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
 var AddToList = React.createClass({displayName: "AddToList",
-    getInitialState: function () {
-        return {};
-    },
 
     handler: function() {
         AppActions.addChar(this.props.item)
@@ -19704,10 +19706,10 @@ var CharCart = React.createClass({displayName: "CharCart",
         return {items: AppStore.getStageList()};
     },
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
+        AppStore.addChangeListener('cart_update', this._onChange);
     },
     componentWillUnmount: function() {
-        AppStore.removeChangeListener(this._onChange)
+        AppStore.removeChangeListener('cart_update', this._onChange)
     },
     _onChange: function() {
         this.setState({ items: AppStore.getStageList() });
@@ -19777,20 +19779,10 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
         };
     },
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
+        AppStore.addChangeListener('cart_update', this._onChange)
     },
     _onChange: function() {
-        if (this.state.question < 4) { 
-            this.setState({ 
-                question: this.state.question + 1,
-            });
-        }
-        else {
-            this.setState({
-                question: 0,
-                items: AppStore.getChar()
-            });
-        }
+        this.state.question++;    
     },
     render: function() {
         var items = this.state.items.map(function (item) {
@@ -19831,9 +19823,17 @@ module.exports = Compatibility;
 React = require('react');
 
 FlipScreen = React.createClass({displayName: "FlipScreen",
+    
+    handler: function() {
+        AppActions.flipScreen()
+    },
+
     render: function() {
         return (
-            React.createElement("img", {className: "logo-container", src: "../src/js/img/arrows-26-128.png"})
+            React.createElement("div", null, 
+                React.createElement("img", {className: "logo-container", src: "../src/js/img/arrows-26-128.png"}), 
+                React.createElement("button", {className: "btn btn-primary", onClick: this.handler})
+            )
         )
     }
 });
@@ -19851,7 +19851,7 @@ var GameTitles = React.createClass({displayName: "GameTitles",
     },
 
     render: function() { 
-        var temp = this.props.flipscreen ? AppStore.getTitles()[this.props.stage] : AppStore.flipscreen(AppStore.currentPlayer())
+        var temp = !this.props.flipscreen ? AppStore.getTitles()[this.props.stage] : AppStore.flipscreen(AppStore.currentPlayer())
         return (
             React.createElement("h1", {className: "title-font"}, temp)
         )
@@ -19905,6 +19905,7 @@ var App = React.createClass({displayName: "App",
 
     getInitialState: function() {
         return {
+            flipscreen: false,
             currPlayer: 1,
             currState: 1,
             stage: 0,
@@ -19917,100 +19918,64 @@ var App = React.createClass({displayName: "App",
     },
 
     componentWillMount: function() {
-        AppStore.addChangeListener('flip', this._flipChange);
-        AppStore.addChangeListener('stage', this._stageChange);
+        AppStore.addChangeListener('switch_to_flipscreen', this._fliptoChange);
+        AppStore.addChangeListener('switch_from_flipscreen', this._flipfromChange);
     },
     
-    _flipChange: function() {
+    _fliptoChange: function() {
         this.setState({
             flipscreen: true,
             currPlayer: AppStore.switchPlayer(),
-            body: flipscreen,
+            body: FlipScreen,
             showResults: false
         });
     },
 
-    _stageChange: function() {
+    _flipfromChange: function() {
         switch(this.state.stage) {
-
             case 0:
                 this.state.stage++;
                 this.setState({
                     flipscreen: false,
-                    currPlayer: AppStore.switchPlayer(),
+                    showResults: true,
+                    body: CharList,
+                    misc: CharCart
+                });
+                break; 
+
+            case 1:
+                this.state.stage++;
+                this.setState({
+                    flipscreen: false,
+                    showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers
                 }); 
                 break;
 
-            case 1:
+            case 3:
+                this.state.stage++;
+                this.setState({
+                    flipscreen: false,
+                    showResults: true,
+                    body: CharQuestion,
+                    misc: CharAnswers
+                });
+                break;
+
+            case 4:
                 this.setState({
                     flipscreen: false,
                     end: AppStore.getSum(),
                     showResults: false,
                     body: Compatibility,
                 }); 
-
-            break;
-    
+                break;
+            
+            break; 
         }
     },   
-    /*_onChange: function() {
-        console.log(this.state.playerlist.length);
-        console.log(AppStore.getStageList().length)
-        //check to see if the 'onChange' event was an addChar or a removeChar
-        if (this.state.playerlist.length < AppStore.getStageList().length) { 
-            switch(this.state.stage) { 
-                case 0:
-                    this.state.currState++;
-                    if (this.state.currState == 5) {
-                        if (!AppStore.switchPlayer()) {
-                            //Switch player and reset cart
-                            this.setState({
-                                flipscreen: true,
-                                currPlayer: 0,
-                                //currState: 1,
-                                 
-                            });
-                            break;
-                        }
-                        else { 
-                            //switch player and change to stage two
-                            this.state.stage++;
-                            this.setState({ 
-                                currPlayer: 1,
-                                body: CharQuestion, 
-                                misc: CharAnswers
-                            });
-                        }
-                    };
-                    break;
-                case 1:
-                    this.state.currState++;
-                    if (this.state.currState == 5) {
-                        if (!AppStore.switchPlayer()) {
-                            this.setState({
-                                currPlayer: 0,
-                                currState: 1
 
-                            });
-                        }
-                        else {
-                            this.setState({
-                                end: AppStore.getSum(),
-                                showResults: false,
-                                body: Compatibility,
-                            });
-                        }
-                    };
-                    break;
-                }
-        }
-        else {
-            //if 'removeChar' update the local playerlist
-            this.setState({ playerlist: AppStore.getStageList() });
-        }
-    },*/
     render: function() {
         return (
             React.createElement("div", null, 
@@ -20057,8 +20022,6 @@ ReactDOM.render(React.createElement(App, null), document.getElementById('main'))
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
-
-var CHANGE_EVENT = 'change';
 
 var char_list = [];
 var answer_titles = [];
@@ -20154,7 +20117,7 @@ var AppStore = assign(EventEmitter.prototype, {
         this.removeListener(change, callback);
     },
     currentPlayer: function() {
-        return activePlayer()
+        return !Player_1.isActive() ? 1 : 0;
     },
     getAnswerTitles: function() {
         return answer_titles;
@@ -20187,17 +20150,20 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
-                var active_list_length = player.activeStage() ? 5 : 10;
-                if (Player_1.isActive() && (player.activeList().length == active_list_length)) {
-                    AppStore.emitChange('flipscreen');
-                }
-                else if (player.activeList().length == active_list_length) {
-                    AppStore.emitChange('stage');
+                AppStore.emitChange('cart_update');
+                var active_list_length = !player.activeStage() ? 5 : 10;
+                if (player.activeList().length == active_list_length) {
+                    AppStore.emitChange('switch_to_flipscreen');
                 }
                 break;
 
             case "REMOVE_CHAR":
                 player.removeFromList(payload.action.item, player.activeList()); 
+                AppStore.emitChange('cart_update');
+                break;
+
+            case "FLIP_SCREEN":
+                AppStore.emitChange('switch_from_flipscreen');
                 break;
         }
 

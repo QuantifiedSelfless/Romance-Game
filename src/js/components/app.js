@@ -13,6 +13,7 @@ var App = React.createClass({
 
     getInitialState: function() {
         return {
+            flipscreen: false,
             currPlayer: 1,
             currState: 1,
             stage: 0,
@@ -25,100 +26,64 @@ var App = React.createClass({
     },
 
     componentWillMount: function() {
-        AppStore.addChangeListener('flip', this._flipChange);
-        AppStore.addChangeListener('stage', this._stageChange);
+        AppStore.addChangeListener('switch_to_flipscreen', this._fliptoChange);
+        AppStore.addChangeListener('switch_from_flipscreen', this._flipfromChange);
     },
     
-    _flipChange: function() {
+    _fliptoChange: function() {
         this.setState({
             flipscreen: true,
             currPlayer: AppStore.switchPlayer(),
-            body: flipscreen,
+            body: FlipScreen,
             showResults: false
         });
     },
 
-    _stageChange: function() {
+    _flipfromChange: function() {
         switch(this.state.stage) {
-
             case 0:
                 this.state.stage++;
                 this.setState({
                     flipscreen: false,
-                    currPlayer: AppStore.switchPlayer(),
+                    showResults: true,
+                    body: CharList,
+                    misc: CharCart
+                });
+                break; 
+
+            case 1:
+                this.state.stage++;
+                this.setState({
+                    flipscreen: false,
+                    showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers
                 }); 
                 break;
 
-            case 1:
+            case 3:
+                this.state.stage++;
+                this.setState({
+                    flipscreen: false,
+                    showResults: true,
+                    body: CharQuestion,
+                    misc: CharAnswers
+                });
+                break;
+
+            case 4:
                 this.setState({
                     flipscreen: false,
                     end: AppStore.getSum(),
                     showResults: false,
                     body: Compatibility,
                 }); 
-
-            break;
-    
+                break;
+            
+            break; 
         }
     },   
-    /*_onChange: function() {
-        console.log(this.state.playerlist.length);
-        console.log(AppStore.getStageList().length)
-        //check to see if the 'onChange' event was an addChar or a removeChar
-        if (this.state.playerlist.length < AppStore.getStageList().length) { 
-            switch(this.state.stage) { 
-                case 0:
-                    this.state.currState++;
-                    if (this.state.currState == 5) {
-                        if (!AppStore.switchPlayer()) {
-                            //Switch player and reset cart
-                            this.setState({
-                                flipscreen: true,
-                                currPlayer: 0,
-                                //currState: 1,
-                                 
-                            });
-                            break;
-                        }
-                        else { 
-                            //switch player and change to stage two
-                            this.state.stage++;
-                            this.setState({ 
-                                currPlayer: 1,
-                                body: CharQuestion, 
-                                misc: CharAnswers
-                            });
-                        }
-                    };
-                    break;
-                case 1:
-                    this.state.currState++;
-                    if (this.state.currState == 5) {
-                        if (!AppStore.switchPlayer()) {
-                            this.setState({
-                                currPlayer: 0,
-                                currState: 1
 
-                            });
-                        }
-                        else {
-                            this.setState({
-                                end: AppStore.getSum(),
-                                showResults: false,
-                                body: Compatibility,
-                            });
-                        }
-                    };
-                    break;
-                }
-        }
-        else {
-            //if 'removeChar' update the local playerlist
-            this.setState({ playerlist: AppStore.getStageList() });
-        }
-    },*/
     render: function() {
         return (
             <div>

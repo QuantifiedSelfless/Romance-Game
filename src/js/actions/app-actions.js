@@ -12,6 +12,11 @@ var AppActions = {
             actionType: "REMOVE_CHAR",
             index: index,
         })
-    }
+    },
+    flipScreen: function() {
+        AppDispatcher.handleViewAction({
+            actionType: "FLIP_SCREEN",
+        })
+    },
 }
 module.exports = AppActions;

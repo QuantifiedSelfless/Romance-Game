@@ -9,20 +9,10 @@ CharQuestion = React.createClass({
         };
     },
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange)
+        AppStore.addChangeListener('cart_update', this._onChange)
     },
     _onChange: function() {
-        if (this.state.question < 4) { 
-            this.setState({ 
-                question: this.state.question + 1,
-            });
-        }
-        else {
-            this.setState({
-                question: 0,
-                items: AppStore.getChar()
-            });
-        }
+        this.state.question++;    
     },
     render: function() {
         var items = this.state.items.map(function (item) {
