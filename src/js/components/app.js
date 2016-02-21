@@ -17,6 +17,7 @@ var App = React.createClass({
             currPlayer: 1,
             currState: 1,
             stage: 0,
+            titlestate: 0,
             end: 0,
             showResults: true,
             title: GameTitles, 
@@ -42,8 +43,8 @@ var App = React.createClass({
     _flipfromChange: function() {
         switch(this.state.stage) {
             case 0:
-                this.state.stage++;
                 this.setState({
+                    stage: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharList,
@@ -52,8 +53,9 @@ var App = React.createClass({
                 break; 
 
             case 1:
-                this.state.stage++;
                 this.setState({
+                    state: this.state.stage + 1,
+                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
@@ -62,8 +64,8 @@ var App = React.createClass({
                 break;
 
             case 3:
-                this.state.stage++;
                 this.setState({
+                    state: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
@@ -73,6 +75,7 @@ var App = React.createClass({
 
             case 4:
                 this.setState({
+                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     end: AppStore.getSum(),
                     showResults: false,
@@ -90,7 +93,7 @@ var App = React.createClass({
                 <div>
                     <div className="titles">
                         <img className="logo-container" src="../src/js/img/Yellow-Tree-logo.png"></img>
-                        <this.state.title stage={this.state.stage} flipscreen={this.state.flipscreen}/>
+                        <this.state.title stage={this.state.titlestate} flipscreen={this.state.flipscreen}/>
                     </div>
                     <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer} /> : null}</div>
                     <div><this.state.body stuff={this.state.end}/></div>

@@ -19772,29 +19772,34 @@ React = require('react');
 AppStore = require('../stores/app-store.js');
 
 CharQuestion = React.createClass({displayName: "CharQuestion",
+
     getInitialState: function() {
         return {
             question: 0,
-            items: AppStore.getChar()
+            items: AppStore.getQuestionList()
         };
     },
+
     componentWillMount: function() {
         AppStore.addChangeListener('cart_update', this._onChange)
     },
-    _onChange: function() {
-        this.state.question++;    
+
+    componentWillUnmount: function() {
+        AppStore.removeChangeListener('cart_update', this._onChange)
     },
+
+    _onChange: function() { 
+        this.setState({ 
+            question: this.state.question + 1,
+        });
+    },
+
     render: function() {
-        var items = this.state.items.map(function (item) {
-            item['stage'] = 1;
-            return (
-                item.question
-            );
-        }); 
         return (
-                React.createElement("h1", {className: "charquestion bold title-font"}, items[this.state.question])
+                React.createElement("h1", {className: "charquestion bold title-font"}, this.state.items[this.state.question])
         );
     }
+
 });
 
 module.exports = CharQuestion;
@@ -19832,7 +19837,7 @@ FlipScreen = React.createClass({displayName: "FlipScreen",
         return (
             React.createElement("div", null, 
                 React.createElement("img", {className: "logo-container", src: "../src/js/img/arrows-26-128.png"}), 
-                React.createElement("button", {className: "btn btn-primary", onClick: this.handler})
+                React.createElement("button", {className: "btn btn-primary", onClick: this.handler}, "Continue")
             )
         )
     }
@@ -19909,6 +19914,7 @@ var App = React.createClass({displayName: "App",
             currPlayer: 1,
             currState: 1,
             stage: 0,
+            titlestate: 0,
             end: 0,
             showResults: true,
             title: GameTitles, 
@@ -19934,8 +19940,8 @@ var App = React.createClass({displayName: "App",
     _flipfromChange: function() {
         switch(this.state.stage) {
             case 0:
-                this.state.stage++;
                 this.setState({
+                    stage: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharList,
@@ -19944,8 +19950,9 @@ var App = React.createClass({displayName: "App",
                 break; 
 
             case 1:
-                this.state.stage++;
                 this.setState({
+                    state: this.state.stage + 1,
+                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
@@ -19954,8 +19961,8 @@ var App = React.createClass({displayName: "App",
                 break;
 
             case 3:
-                this.state.stage++;
                 this.setState({
+                    state: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
@@ -19965,6 +19972,7 @@ var App = React.createClass({displayName: "App",
 
             case 4:
                 this.setState({
+                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     end: AppStore.getSum(),
                     showResults: false,
@@ -19982,7 +19990,7 @@ var App = React.createClass({displayName: "App",
                 React.createElement("div", null, 
                     React.createElement("div", {className: "titles"}, 
                         React.createElement("img", {className: "logo-container", src: "../src/js/img/Yellow-Tree-logo.png"}), 
-                        React.createElement(this.state.title, {stage: this.state.stage, flipscreen: this.state.flipscreen})
+                        React.createElement(this.state.title, {stage: this.state.titlestate, flipscreen: this.state.flipscreen})
                     ), 
                     React.createElement("div", null, this.state.showResults ? React.createElement(PlayerPick, {stuff: this.state.currPlayer}) : null), 
                     React.createElement("div", null, React.createElement(this.state.body, {stuff: this.state.end}))
@@ -20125,6 +20133,9 @@ var AppStore = assign(EventEmitter.prototype, {
     getTitles: function() {
         return title_list;
     }, 
+    getQuestionList() {
+        return question_list;
+    },
     getChar: function() {
         return char_list;
     },
@@ -20151,7 +20162,8 @@ var AppStore = assign(EventEmitter.prototype, {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
                 AppStore.emitChange('cart_update');
-                var active_list_length = !player.activeStage() ? 5 : 10;
+                var active_list_length = !player.activeStage() ? 5 : 5;
+                console.log(player.activeList().length);
                 if (player.activeList().length == active_list_length) {
                     AppStore.emitChange('switch_to_flipscreen');
                 }

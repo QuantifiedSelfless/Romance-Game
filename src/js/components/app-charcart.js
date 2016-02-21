@@ -6,18 +6,23 @@ var AppActions = require('../actions/app-actions.js');
 
 
 var CharCart = React.createClass({
+    
     getInitialState: function() {
         return {items: AppStore.getStageList()};
     },
+    
     componentWillMount: function() {
         AppStore.addChangeListener('cart_update', this._onChange);
     },
+
     componentWillUnmount: function() {
         AppStore.removeChangeListener('cart_update', this._onChange)
     },
+
     _onChange: function() {
         this.setState({ items: AppStore.getStageList() });
     },
+
     render: function() {
         var items = this.state.items.map(function(item, i) {
             return (
@@ -29,14 +34,14 @@ var CharCart = React.createClass({
                 </div>
             );   
         })
-    return (
-        <div className="choosen">
-            <h3>Choosen Characteristics</h3> 
-            <div className="clearfix field">
-                {items}
+        return (
+            <div className="choosen">
+                <h3>Choosen Characteristics</h3> 
+                <div className="clearfix field">
+                    {items}
+                </div>
             </div>
-        </div>
-    )
+        )
     }
 });
 

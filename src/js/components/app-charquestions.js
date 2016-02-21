@@ -2,29 +2,34 @@ React = require('react');
 AppStore = require('../stores/app-store.js');
 
 CharQuestion = React.createClass({
+
     getInitialState: function() {
         return {
             question: 0,
-            items: AppStore.getChar()
+            items: AppStore.getQuestionList()
         };
     },
+
     componentWillMount: function() {
         AppStore.addChangeListener('cart_update', this._onChange)
     },
-    _onChange: function() {
-        this.state.question++;    
+
+    componentWillUnmount: function() {
+        AppStore.removeChangeListener('cart_update', this._onChange)
     },
+
+    _onChange: function() { 
+        this.setState({ 
+            question: this.state.question + 1,
+        });
+    },
+
     render: function() {
-        var items = this.state.items.map(function (item) {
-            item['stage'] = 1;
-            return (
-                item.question
-            );
-        }); 
         return (
-                <h1 className="charquestion bold title-font">{items[this.state.question]}</h1>
+                <h1 className="charquestion bold title-font">{this.state.items[this.state.question]}</h1>
         );
     }
+
 });
 
 module.exports = CharQuestion;

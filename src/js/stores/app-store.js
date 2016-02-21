@@ -105,6 +105,9 @@ var AppStore = assign(EventEmitter.prototype, {
     getTitles: function() {
         return title_list;
     }, 
+    getQuestionList() {
+        return question_list;
+    },
     getChar: function() {
         return char_list;
     },
@@ -131,7 +134,8 @@ var AppStore = assign(EventEmitter.prototype, {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
                 AppStore.emitChange('cart_update');
-                var active_list_length = !player.activeStage() ? 5 : 10;
+                var active_list_length = !player.activeStage() ? 5 : 5;
+                console.log(player.activeList().length);
                 if (player.activeList().length == active_list_length) {
                     AppStore.emitChange('switch_to_flipscreen');
                 }
