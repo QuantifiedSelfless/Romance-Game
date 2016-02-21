@@ -7,8 +7,10 @@ var CharQuestion = require('./app-charquestions.js');
 var CharAnswers = require('./app-charanswers.js');
 var Compatibility = require('./app-compatibility.js');
 var PlayerPick = require('./app-playerpick.js');
+var FlipScreen = require('./app-flipscreen.js');
 
 var App = React.createClass({
+
     getInitialState: function() {
         return {
             currPlayer: 1,
@@ -19,33 +21,72 @@ var App = React.createClass({
             title: GameTitles, 
             body: CharList, 
             misc: CharCart,
-            playerlist: []
         } 
     },
 
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange);
+        AppStore.addChangeListener('flip', this._flipChange);
+        AppStore.addChangeListener('stage', this._stageChange);
+    },
+    
+    _flipChange: function() {
+        this.setState({
+            flipscreen: true,
+            currPlayer: AppStore.switchPlayer(),
+            body: flipscreen,
+            showResults: false
+        });
     },
 
-    _onChange: function() {
+    _stageChange: function() {
+        switch(this.state.stage) {
+
+            case 0:
+                this.state.stage++;
+                this.setState({
+                    flipscreen: false,
+                    currPlayer: AppStore.switchPlayer(),
+                    body: CharQuestion,
+                    misc: CharAnswers
+                }); 
+                break;
+
+            case 1:
+                this.setState({
+                    flipscreen: false,
+                    end: AppStore.getSum(),
+                    showResults: false,
+                    body: Compatibility,
+                }); 
+
+            break;
+    
+        }
+    },   
+    /*_onChange: function() {
+        console.log(this.state.playerlist.length);
+        console.log(AppStore.getStageList().length)
+        //check to see if the 'onChange' event was an addChar or a removeChar
         if (this.state.playerlist.length < AppStore.getStageList().length) { 
-            switch(this.state.stage) {
+            switch(this.state.stage) { 
                 case 0:
-                    this.setState({ currState: this.state.currState + 1 });
-                    console.log(this.state.currState);
-                    if (this.state.currState == 6) {
+                    this.state.currState++;
+                    if (this.state.currState == 5) {
                         if (!AppStore.switchPlayer()) {
+                            //Switch player and reset cart
                             this.setState({
+                                flipscreen: true,
                                 currPlayer: 0,
-                                currState: 1,
+                                //currState: 1,
+                                 
                             });
                             break;
                         }
                         else { 
+                            //switch player and change to stage two
+                            this.state.stage++;
                             this.setState({ 
                                 currPlayer: 1,
-                                currState: 1,  
-                                stage: this.state.stage + 1,
                                 body: CharQuestion, 
                                 misc: CharAnswers
                             });
@@ -53,20 +94,19 @@ var App = React.createClass({
                     };
                     break;
                 case 1:
-                    console.log(this.state.currState)
-                    this.setState({ currState: this.state.currState + 1});
+                    this.state.currState++;
                     if (this.state.currState == 5) {
                         if (!AppStore.switchPlayer()) {
                             this.setState({
-                                currState: 1,
-                                currPlayer: 1,
+                                currPlayer: 0,
+                                currState: 1
+
                             });
                         }
                         else {
                             this.setState({
                                 end: AppStore.getSum(),
                                 showResults: false,
-                                stage: this.state.stage + 1,
                                 body: Compatibility,
                             });
                         }
@@ -75,19 +115,20 @@ var App = React.createClass({
                 }
         }
         else {
+            //if 'removeChar' update the local playerlist
             this.setState({ playerlist: AppStore.getStageList() });
         }
-    },
+    },*/
     render: function() {
         return (
             <div>
                 <div>
                     <div className="titles">
                         <img className="logo-container" src="../src/js/img/Yellow-Tree-logo.png"></img>
-                        <this.state.title stage={this.state.stage} />
+                        <this.state.title stage={this.state.stage} flipscreen={this.state.flipscreen}/>
                     </div>
-                    <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer}/> : null}</div>
-                    <div><this.state.body stuff={this.state.end} /></div>
+                    <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer} /> : null}</div>
+                    <div><this.state.body stuff={this.state.end}/></div>
                 </div>
                 <div>{this.state.showResults ? <this.state.misc /> : null}</div>
             </div>

@@ -19642,7 +19642,7 @@ var AppActions = {
 }
 module.exports = AppActions;
 
-},{"../dispatchers/app-dispatcher.js":174}],164:[function(require,module,exports){
+},{"../dispatchers/app-dispatcher.js":175}],164:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
@@ -19691,7 +19691,7 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
 
 module.exports = CharAnswers;
 
-},{"../actions/app-actions.js":163,"../stores/app-store.js":176,"./app-addtolist.js":164,"react":162}],166:[function(require,module,exports){
+},{"../actions/app-actions.js":163,"../stores/app-store.js":177,"./app-addtolist.js":164,"react":162}],166:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var RemoveFromList = require('./app-removefromlist.js');
@@ -19736,7 +19736,7 @@ var CharCart = React.createClass({displayName: "CharCart",
 
 module.exports = CharCart
 
-},{"../actions/app-actions.js":163,"../stores/app-store.js":176,"./app-removefromlist.js":172,"react":162}],167:[function(require,module,exports){
+},{"../actions/app-actions.js":163,"../stores/app-store.js":177,"./app-removefromlist.js":173,"react":162}],167:[function(require,module,exports){
 var React = require('react');
 var AppStore = require('../stores/app-store.js');
 var AddToList = require('./app-addtolist.js');
@@ -19765,7 +19765,7 @@ var CharList = React.createClass({displayName: "CharList",
 
 module.exports = CharList
 
-},{"../stores/app-store.js":176,"./app-addtolist.js":164,"react":162}],168:[function(require,module,exports){
+},{"../stores/app-store.js":177,"./app-addtolist.js":164,"react":162}],168:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
@@ -19807,7 +19807,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
 
 module.exports = CharQuestion;
 
-},{"../stores/app-store.js":176,"react":162}],169:[function(require,module,exports){
+},{"../stores/app-store.js":177,"react":162}],169:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
@@ -19827,7 +19827,20 @@ var Compatibility = React.createClass({displayName: "Compatibility",
 
 module.exports = Compatibility;
 
-},{"../stores/app-store.js":176,"react":162}],170:[function(require,module,exports){
+},{"../stores/app-store.js":177,"react":162}],170:[function(require,module,exports){
+React = require('react');
+
+FlipScreen = React.createClass({displayName: "FlipScreen",
+    render: function() {
+        return (
+            React.createElement("img", {className: "logo-container", src: "../src/js/img/arrows-26-128.png"})
+        )
+    }
+});
+
+module.exports = FlipScreen;
+
+},{"react":162}],171:[function(require,module,exports){
 React = require('react');
 AppStore = require('../stores/app-store.js');
     
@@ -19838,8 +19851,9 @@ var GameTitles = React.createClass({displayName: "GameTitles",
     },
 
     render: function() { 
+        var temp = this.props.flipscreen ? AppStore.getTitles()[this.props.stage] : AppStore.flipscreen(AppStore.currentPlayer())
         return (
-            React.createElement("h1", {className: "title-font"}, this.state.titles[this.props.stage])
+            React.createElement("h1", {className: "title-font"}, temp)
         )
     }
 
@@ -19847,7 +19861,7 @@ var GameTitles = React.createClass({displayName: "GameTitles",
 
 module.exports = GameTitles;
 
-},{"../stores/app-store.js":176,"react":162}],171:[function(require,module,exports){
+},{"../stores/app-store.js":177,"react":162}],172:[function(require,module,exports){
 React = require('react')
 
 var PlayerPick = React.createClass({displayName: "PlayerPick", 
@@ -19860,7 +19874,7 @@ var PlayerPick = React.createClass({displayName: "PlayerPick",
 
 module.exports = PlayerPick;
 
-},{"react":162}],172:[function(require,module,exports){
+},{"react":162}],173:[function(require,module,exports){
 var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
@@ -19875,7 +19889,7 @@ var RemoveFromList = React.createClass({displayName: "RemoveFromList",
 
 module.exports = RemoveFromList;
 
-},{"../actions/app-actions.js":163,"react":162}],173:[function(require,module,exports){
+},{"../actions/app-actions.js":163,"react":162}],174:[function(require,module,exports){
 var React = require('react');
 var CharList = require('./app-charlist.js');
 var GameTitles = require('./app-gametitles.js');
@@ -19885,8 +19899,10 @@ var CharQuestion = require('./app-charquestions.js');
 var CharAnswers = require('./app-charanswers.js');
 var Compatibility = require('./app-compatibility.js');
 var PlayerPick = require('./app-playerpick.js');
+var FlipScreen = require('./app-flipscreen.js');
 
 var App = React.createClass({displayName: "App",
+
     getInitialState: function() {
         return {
             currPlayer: 1,
@@ -19897,33 +19913,72 @@ var App = React.createClass({displayName: "App",
             title: GameTitles, 
             body: CharList, 
             misc: CharCart,
-            playerlist: []
         } 
     },
 
     componentWillMount: function() {
-        AppStore.addChangeListener(this._onChange);
+        AppStore.addChangeListener('flip', this._flipChange);
+        AppStore.addChangeListener('stage', this._stageChange);
+    },
+    
+    _flipChange: function() {
+        this.setState({
+            flipscreen: true,
+            currPlayer: AppStore.switchPlayer(),
+            body: flipscreen,
+            showResults: false
+        });
     },
 
-    _onChange: function() {
+    _stageChange: function() {
+        switch(this.state.stage) {
+
+            case 0:
+                this.state.stage++;
+                this.setState({
+                    flipscreen: false,
+                    currPlayer: AppStore.switchPlayer(),
+                    body: CharQuestion,
+                    misc: CharAnswers
+                }); 
+                break;
+
+            case 1:
+                this.setState({
+                    flipscreen: false,
+                    end: AppStore.getSum(),
+                    showResults: false,
+                    body: Compatibility,
+                }); 
+
+            break;
+    
+        }
+    },   
+    /*_onChange: function() {
+        console.log(this.state.playerlist.length);
+        console.log(AppStore.getStageList().length)
+        //check to see if the 'onChange' event was an addChar or a removeChar
         if (this.state.playerlist.length < AppStore.getStageList().length) { 
-            switch(this.state.stage) {
+            switch(this.state.stage) { 
                 case 0:
-                    this.setState({ currState: this.state.currState + 1 });
-                    console.log(this.state.currState);
-                    if (this.state.currState == 6) {
+                    this.state.currState++;
+                    if (this.state.currState == 5) {
                         if (!AppStore.switchPlayer()) {
+                            //Switch player and reset cart
                             this.setState({
+                                flipscreen: true,
                                 currPlayer: 0,
-                                currState: 1,
+                                //currState: 1,
+                                 
                             });
                             break;
                         }
                         else { 
+                            //switch player and change to stage two
+                            this.state.stage++;
                             this.setState({ 
                                 currPlayer: 1,
-                                currState: 1,  
-                                stage: this.state.stage + 1,
                                 body: CharQuestion, 
                                 misc: CharAnswers
                             });
@@ -19931,20 +19986,19 @@ var App = React.createClass({displayName: "App",
                     };
                     break;
                 case 1:
-                    console.log(this.state.currState)
-                    this.setState({ currState: this.state.currState + 1});
+                    this.state.currState++;
                     if (this.state.currState == 5) {
                         if (!AppStore.switchPlayer()) {
                             this.setState({
-                                currState: 1,
-                                currPlayer: 1,
+                                currPlayer: 0,
+                                currState: 1
+
                             });
                         }
                         else {
                             this.setState({
                                 end: AppStore.getSum(),
                                 showResults: false,
-                                stage: this.state.stage + 1,
                                 body: Compatibility,
                             });
                         }
@@ -19953,16 +20007,17 @@ var App = React.createClass({displayName: "App",
                 }
         }
         else {
+            //if 'removeChar' update the local playerlist
             this.setState({ playerlist: AppStore.getStageList() });
         }
-    },
+    },*/
     render: function() {
         return (
             React.createElement("div", null, 
                 React.createElement("div", null, 
                     React.createElement("div", {className: "titles"}, 
                         React.createElement("img", {className: "logo-container", src: "../src/js/img/Yellow-Tree-logo.png"}), 
-                        React.createElement(this.state.title, {stage: this.state.stage})
+                        React.createElement(this.state.title, {stage: this.state.stage, flipscreen: this.state.flipscreen})
                     ), 
                     React.createElement("div", null, this.state.showResults ? React.createElement(PlayerPick, {stuff: this.state.currPlayer}) : null), 
                     React.createElement("div", null, React.createElement(this.state.body, {stuff: this.state.end}))
@@ -19975,7 +20030,7 @@ var App = React.createClass({displayName: "App",
 
 module.exports = App;
 
-},{"../stores/app-store.js":176,"./app-charanswers.js":165,"./app-charcart.js":166,"./app-charlist.js":167,"./app-charquestions.js":168,"./app-compatibility.js":169,"./app-gametitles.js":170,"./app-playerpick.js":171,"react":162}],174:[function(require,module,exports){
+},{"../stores/app-store.js":177,"./app-charanswers.js":165,"./app-charcart.js":166,"./app-charlist.js":167,"./app-charquestions.js":168,"./app-compatibility.js":169,"./app-flipscreen.js":170,"./app-gametitles.js":171,"./app-playerpick.js":172,"react":162}],175:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
@@ -19991,13 +20046,13 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":3,"react/lib/Object.assign":28}],175:[function(require,module,exports){
+},{"flux":3,"react/lib/Object.assign":28}],176:[function(require,module,exports){
 var App = require('./components/app');
 var ReactDOM = require('react-dom');
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('main'));
 
-},{"./components/app":173,"react-dom":6}],176:[function(require,module,exports){
+},{"./components/app":174,"react-dom":6}],177:[function(require,module,exports){
 'use strict';
 var AppDispatcher = require('../dispatchers/app-dispatcher.js');
 var assign = require('react/lib/Object.assign');
@@ -20007,7 +20062,7 @@ var CHANGE_EVENT = 'change';
 
 var char_list = [];
 var answer_titles = [];
-
+var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2']
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
 var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable', 'Disciplined', 'Deep', 'Elegent', 'Extraordinary', 'Freethinking', 'Generous', 'Hardworking', 'Loyal', 'Optimistic', 'Responsible', 'Romantic']
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
@@ -20089,23 +20144,26 @@ function activePlayer() {
     return player;
 }
 var AppStore = assign(EventEmitter.prototype, {
-    emitChange: function() {
-        this.emit(CHANGE_EVENT)
+    emitChange: function(change) {
+        this.emit(change)
     },
-    addChangeListener: function(callback) {
-        this.on(CHANGE_EVENT, callback)
+    addChangeListener: function(change, callback) {
+        this.on(change, callback);
     },
-    removeChangeListener: function(callback) {
-        this.removeListener(CHANGE_EVENT, callback)
+    removeChangeListener: function(change, callback) {
+        this.removeListener(change, callback);
+    },
+    currentPlayer: function() {
+        return activePlayer()
     },
     getAnswerTitles: function() {
-        return answer_titles
+        return answer_titles;
     },
     getTitles: function() {
-        return title_list
+        return title_list;
     }, 
     getChar: function() {
-        return char_list
+        return char_list;
     },
     switchPlayer: function() {
         Player_1.flipActive();
@@ -20118,7 +20176,10 @@ var AppStore = assign(EventEmitter.prototype, {
     },
     getSum: function() {
         var player = activePlayer();
-        return player.sumList()
+        return player.sumList();
+    },
+    flipscreen: function(i) {
+        return flipmessage[i];
     },
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
@@ -20126,6 +20187,13 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
+                var active_list_length = player.activeStage() ? 5 : 10;
+                if (Player_1.isActive() && (player.activeList().length == active_list_length)) {
+                    AppStore.emitChange('flipscreen');
+                }
+                else if (player.activeList().length == active_list_length) {
+                    AppStore.emitChange('stage');
+                }
                 break;
 
             case "REMOVE_CHAR":
@@ -20133,12 +20201,10 @@ var AppStore = assign(EventEmitter.prototype, {
                 break;
         }
 
-        AppStore.emitChange();
-
         return true;
     })
 })
 
 module.exports = AppStore;
 
-},{"../dispatchers/app-dispatcher.js":174,"events":1,"react/lib/Object.assign":28}]},{},[175]);
+},{"../dispatchers/app-dispatcher.js":175,"events":1,"react/lib/Object.assign":28}]},{},[176]);

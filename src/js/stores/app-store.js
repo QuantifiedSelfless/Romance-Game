@@ -7,7 +7,7 @@ var CHANGE_EVENT = 'change';
 
 var char_list = [];
 var answer_titles = [];
-
+var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2']
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
 var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable', 'Disciplined', 'Deep', 'Elegent', 'Extraordinary', 'Freethinking', 'Generous', 'Hardworking', 'Loyal', 'Optimistic', 'Responsible', 'Romantic']
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
@@ -89,23 +89,26 @@ function activePlayer() {
     return player;
 }
 var AppStore = assign(EventEmitter.prototype, {
-    emitChange: function() {
-        this.emit(CHANGE_EVENT)
+    emitChange: function(change) {
+        this.emit(change)
     },
-    addChangeListener: function(callback) {
-        this.on(CHANGE_EVENT, callback)
+    addChangeListener: function(change, callback) {
+        this.on(change, callback);
     },
-    removeChangeListener: function(callback) {
-        this.removeListener(CHANGE_EVENT, callback)
+    removeChangeListener: function(change, callback) {
+        this.removeListener(change, callback);
+    },
+    currentPlayer: function() {
+        return activePlayer()
     },
     getAnswerTitles: function() {
-        return answer_titles
+        return answer_titles;
     },
     getTitles: function() {
-        return title_list
+        return title_list;
     }, 
     getChar: function() {
-        return char_list
+        return char_list;
     },
     switchPlayer: function() {
         Player_1.flipActive();
@@ -118,7 +121,10 @@ var AppStore = assign(EventEmitter.prototype, {
     },
     getSum: function() {
         var player = activePlayer();
-        return player.sumList()
+        return player.sumList();
+    },
+    flipscreen: function(i) {
+        return flipmessage[i];
     },
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
@@ -126,14 +132,19 @@ var AppStore = assign(EventEmitter.prototype, {
         switch(action.actionType) {
             case "ADD_CHAR":
                 player.addToList(payload.action.item, player.activeList());  
+                var active_list_length = player.activeStage() ? 5 : 10;
+                if (Player_1.isActive() && (player.activeList().length == active_list_length)) {
+                    AppStore.emitChange('flipscreen');
+                }
+                else if (player.activeList().length == active_list_length) {
+                    AppStore.emitChange('stage');
+                }
                 break;
 
             case "REMOVE_CHAR":
                 player.removeFromList(payload.action.item, player.activeList()); 
                 break;
         }
-
-        AppStore.emitChange();
 
         return true;
     })
