@@ -25,6 +25,7 @@ for(var i=0; i<(temp_list.length); i++) {
         'question': question_list[i]
     });
 }    
+
 for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
         'id': i + 1,
@@ -62,6 +63,9 @@ class player {
         }
         for (var i=0; i<char_list.length; i++) {
             char_list[i]['inList'] = false; 
+        }
+        for (var i=0; i<answer_titles.length; i++) {
+            answer_titles[i]['inList'] = false;
         }
         this.active = !this.active;
     }

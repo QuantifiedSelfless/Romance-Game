@@ -42,6 +42,7 @@ var App = React.createClass({
     },
 
     _flipfromChange: function() {
+
         switch(this.state.stage) {
             case 0:
                 this.setState({
@@ -56,7 +57,7 @@ var App = React.createClass({
             case 1:
                 AppStore.getState()
                 this.setState({
-                    state: this.state.stage + 1,
+                    stage: this.state.stage + 1,
                     titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     showResults: true,
@@ -65,23 +66,21 @@ var App = React.createClass({
                 }); 
                 break;
 
-            case 3:
+            case 2:
                 this.setState({
-                    state: this.state.stage + 1,
+                    stage: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers
                 });
                 break;
-
-            case 4:
+            case 3:
                 this.setState({
-                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     end: AppStore.getSum(),
-                    showResults: false,
                     body: Compatibility,
+                    showResults: false
                 }); 
                 break;
             
