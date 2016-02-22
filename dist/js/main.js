@@ -19848,9 +19848,11 @@ var Compatibility = React.createClass({displayName: "Compatibility",
             width: this.props.stuff + '%'
         } 
         return (
-            //<h1>{"You are " + this.props.stuff + " percent compatible."}</h1>
-            React.createElement("div", {className: "meter"}, 
-                React.createElement("span", {style: styles})
+            React.createElement("div", null, 
+                React.createElement("h1", null, "You are " + this.props.stuff + " percent compatible."), 
+                React.createElement("div", {className: "meter"}, 
+                    React.createElement("span", {style: styles})
+                )
             )
         )
     }
@@ -19973,6 +19975,7 @@ var App = React.createClass({displayName: "App",
     },
 
     _flipfromChange: function() {
+
         switch(this.state.stage) {
             case 0:
                 this.setState({
@@ -19987,7 +19990,7 @@ var App = React.createClass({displayName: "App",
             case 1:
                 AppStore.getState()
                 this.setState({
-                    state: this.state.stage + 1,
+                    stage: this.state.stage + 1,
                     titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     showResults: true,
@@ -19996,23 +19999,21 @@ var App = React.createClass({displayName: "App",
                 }); 
                 break;
 
-            case 3:
+            case 2:
                 this.setState({
-                    state: this.state.stage + 1,
+                    stage: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers
                 });
                 break;
-
-            case 4:
+            case 3:
                 this.setState({
-                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     end: AppStore.getSum(),
-                    showResults: false,
                     body: Compatibility,
+                    showResults: false
                 }); 
                 break;
             
@@ -20089,6 +20090,7 @@ for(var i=0; i<(temp_list.length); i++) {
         'question': question_list[i]
     });
 }    
+
 for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
         'id': i + 1,
@@ -20126,6 +20128,9 @@ class player {
         }
         for (var i=0; i<char_list.length; i++) {
             char_list[i]['inList'] = false; 
+        }
+        for (var i=0; i<answer_titles.length; i++) {
+            answer_titles[i]['inList'] = false;
         }
         this.active = !this.active;
     }
@@ -20217,17 +20222,19 @@ var AppStore = assign(EventEmitter.prototype, {
             
             //this triggers when things are added to the player lists
             case "ADD_CHAR":
-                player.addToList(payload.action.item, player.activeList());  
-                AppStore.emitChange('cart_update');
-                
+                //this allows for different active list lengths for stage two question list
                 var active_list_length = !player.activeStage() ? 5 : 5;
-                console.log(player.activeList().length); 
+                //only add if cart has room
+                if (player.activeList().length != active_list_length) {
+                    player.addToList(payload.action.item, player.activeList());  
+                    AppStore.emitChange('cart_update');
+                }
                 if (!current_state && (player.activeList().length == active_list_length)) {
                     //this is a 'confirm' button for the stage one cart
                     AppStore.emitChange('show_button');
                     break;
                 }
-                 
+                //this will trigger from the flipscreen continue button
                 else if (player.activeList().length == active_list_length) {
                     AppStore.emitChange('switch_to_flipscreen');
                 }

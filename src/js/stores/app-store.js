@@ -157,17 +157,19 @@ var AppStore = assign(EventEmitter.prototype, {
             
             //this triggers when things are added to the player lists
             case "ADD_CHAR":
-                player.addToList(payload.action.item, player.activeList());  
-                AppStore.emitChange('cart_update');
-                
+                //this allows for different active list lengths for stage two question list
                 var active_list_length = !player.activeStage() ? 5 : 5;
-                console.log(player.activeList().length); 
+                //only add if cart has room
+                if (player.activeList().length != active_list_length) {
+                    player.addToList(payload.action.item, player.activeList());  
+                    AppStore.emitChange('cart_update');
+                }
                 if (!current_state && (player.activeList().length == active_list_length)) {
                     //this is a 'confirm' button for the stage one cart
                     AppStore.emitChange('show_button');
                     break;
                 }
-                 
+                //this will trigger from the flipscreen continue button
                 else if (player.activeList().length == active_list_length) {
                     AppStore.emitChange('switch_to_flipscreen');
                 }
