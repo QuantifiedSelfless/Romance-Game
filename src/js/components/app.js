@@ -16,6 +16,7 @@ var App = React.createClass({
             flipscreen: false,
             currPlayer: 1,
             currState: 1,
+            confirm_cart: true,
             stage: 0,
             titlestate: 0,
             end: 0,
@@ -53,6 +54,7 @@ var App = React.createClass({
                 break; 
 
             case 1:
+                AppStore.getState()
                 this.setState({
                     state: this.state.stage + 1,
                     titlestate: this.state.titlestate + 1,
@@ -97,7 +99,7 @@ var App = React.createClass({
                     </div>
                     <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer} /> : null}</div>
                     <div><this.state.body stuff={this.state.end}/></div>
-                </div>
+                </div> 
                 <div>{this.state.showResults ? <this.state.misc /> : null}</div>
             </div>
         )

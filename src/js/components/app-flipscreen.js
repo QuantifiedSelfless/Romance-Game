@@ -3,7 +3,7 @@ React = require('react');
 FlipScreen = React.createClass({
     
     handler: function() {
-        AppActions.flipScreen()
+        AppActions.flipFromScreen()
     },
 
     render: function() {
