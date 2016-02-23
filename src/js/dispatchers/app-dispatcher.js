@@ -2,6 +2,7 @@ var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
 var AppDispatcher = assign(new Dispatcher(), {
+
    handleViewAction: function(action) {
         console.log('action', action)
         this.dispatch({
@@ -9,6 +10,7 @@ var AppDispatcher = assign(new Dispatcher(), {
             action: action
         })
     }
+
 });
 
 module.exports = AppDispatcher;

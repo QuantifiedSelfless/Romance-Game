@@ -153,6 +153,7 @@ var AppStore = assign(EventEmitter.prototype, {
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
         var player = activePlayer();
+        var finalstate = false;
         switch(action.actionType) {
             
             //this triggers when things are added to the player lists
@@ -171,9 +172,12 @@ var AppStore = assign(EventEmitter.prototype, {
                 }
                 //this will trigger from the flipscreen continue button
                 else if (player.activeList().length == active_list_length) {
+                    if (Player_2.isActive()) { 
+                        AppStore.emitChange('switch_from_flipscreen'); 
+                        break;
+                    }
                     AppStore.emitChange('switch_to_flipscreen');
-                }
-                
+                } 
                 break;
 
             //this triggers only in stage one when things are removed from the app-cart 
@@ -187,6 +191,7 @@ var AppStore = assign(EventEmitter.prototype, {
             case "FLIP_TO_SCREEN": 
                 AppStore.emitChange('switch_to_flipscreen');
                 break;
+
             case "FLIP_FROM_SCREEN": 
                 AppStore.emitChange('switch_from_flipscreen');
                 break;

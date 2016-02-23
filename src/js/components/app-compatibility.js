@@ -2,6 +2,7 @@ React = require('react');
 AppStore = require('../stores/app-store.js');
 
 var Compatibility = React.createClass({
+
     render: function() { 
         var styles = {
             width: this.props.stuff + '%'
@@ -15,6 +16,7 @@ var Compatibility = React.createClass({
             </div>
         )
     }
+
 });
 
 module.exports = Compatibility;

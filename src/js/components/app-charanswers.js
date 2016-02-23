@@ -4,9 +4,11 @@ AppActions = require('../actions/app-actions.js');
 AddToList = require('./app-addtolist.js');
 
 CharAnswers = React.createClass({ 
+
     getInitialState: function() {
         return { items: AppStore.getAnswerTitles() }
     },
+
     render: function() {
         var items = this.state.items.map( function(item, i) {
             return (
@@ -19,6 +21,7 @@ CharAnswers = React.createClass({
             </div>
         );
     }
+
 });
 
 module.exports = CharAnswers;

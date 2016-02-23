@@ -19627,28 +19627,33 @@ module.exports = require('./lib/React');
 var AppDispatcher = require("../dispatchers/app-dispatcher.js");
 
 var AppActions = {
+
     addChar: function(item) {
         AppDispatcher.handleViewAction({
             actionType: "ADD_CHAR",
             item: item,
         })
     },
+
     removeChar: function(index) {
         AppDispatcher.handleViewAction({
             actionType: "REMOVE_CHAR",
             index: index,
         })
     },
+
     flipToScreen: function() {
         AppDispatcher.handleViewAction({
             actionType: "FLIP_TO_SCREEN",
         })
     },
+    
     flipFromScreen: function() {
         AppDispatcher.handleViewAction({
             actionType: "FLIP_FROM_SCREEN",
         })
     },
+
 }
 module.exports = AppActions;
 
@@ -19679,9 +19684,11 @@ AppActions = require('../actions/app-actions.js');
 AddToList = require('./app-addtolist.js');
 
 CharAnswers = React.createClass({displayName: "CharAnswers", 
+
     getInitialState: function() {
         return { items: AppStore.getAnswerTitles() }
     },
+
     render: function() {
         var items = this.state.items.map( function(item, i) {
             return (
@@ -19694,6 +19701,7 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
             )
         );
     }
+
 });
 
 module.exports = CharAnswers;
@@ -19843,6 +19851,7 @@ React = require('react');
 AppStore = require('../stores/app-store.js');
 
 var Compatibility = React.createClass({displayName: "Compatibility",
+
     render: function() { 
         var styles = {
             width: this.props.stuff + '%'
@@ -19856,6 +19865,7 @@ var Compatibility = React.createClass({displayName: "Compatibility",
             )
         )
     }
+
 });
 
 module.exports = Compatibility;
@@ -19906,11 +19916,13 @@ module.exports = GameTitles;
 React = require('react')
 
 var PlayerPick = React.createClass({displayName: "PlayerPick", 
+
     render: function() {
         return (
             React.createElement("h3", {className: "center mr4 italic"}, this.props.stuff ? "Player 1 is currently picking" : "Player 2 is currently picking")
         )
     }
+
 });
 
 module.exports = PlayerPick;
@@ -19920,12 +19932,15 @@ var React = require('react');
 var AppActions = require('../actions/app-actions.js');
 
 var RemoveFromList = React.createClass({displayName: "RemoveFromList",
+    
     handler: function() {
         AppActions.removeChar(this.props.index)
     },
+
     render: function() {
         return React.createElement("div", {className: "center", onClick: this.handler}, "x")
     }
+
 });
 
 module.exports = RemoveFromList;
@@ -19946,6 +19961,7 @@ var App = React.createClass({displayName: "App",
 
     getInitialState: function() {
         return {
+            finalstate: false,
             flipscreen: false,
             currPlayer: 1,
             currState: 1,
@@ -19977,6 +19993,7 @@ var App = React.createClass({displayName: "App",
     _flipfromChange: function() {
 
         switch(this.state.stage) {
+            //stage 1, part 2
             case 0:
                 this.setState({
                     stage: this.state.stage + 1,
@@ -19986,7 +20003,7 @@ var App = React.createClass({displayName: "App",
                     misc: CharCart
                 });
                 break; 
-
+            //stage 2, part 1
             case 1:
                 AppStore.getState()
                 this.setState({
@@ -19998,18 +20015,21 @@ var App = React.createClass({displayName: "App",
                     misc: CharAnswers
                 }); 
                 break;
-
+            //stage 2, part 2
             case 2:
                 this.setState({
                     stage: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
-                    misc: CharAnswers
+                    misc: CharAnswers,
+                    finalstate: true
                 });
                 break;
+            //final stage 
             case 3:
                 this.setState({
+                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     end: AppStore.getSum(),
                     body: Compatibility,
@@ -20045,6 +20065,7 @@ var Dispatcher = require('flux').Dispatcher;
 var assign = require('react/lib/Object.assign');
 
 var AppDispatcher = assign(new Dispatcher(), {
+
    handleViewAction: function(action) {
         console.log('action', action)
         this.dispatch({
@@ -20052,6 +20073,7 @@ var AppDispatcher = assign(new Dispatcher(), {
             action: action
         })
     }
+
 });
 
 module.exports = AppDispatcher;
@@ -20218,6 +20240,7 @@ var AppStore = assign(EventEmitter.prototype, {
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;
         var player = activePlayer();
+        var finalstate = false;
         switch(action.actionType) {
             
             //this triggers when things are added to the player lists
@@ -20236,9 +20259,12 @@ var AppStore = assign(EventEmitter.prototype, {
                 }
                 //this will trigger from the flipscreen continue button
                 else if (player.activeList().length == active_list_length) {
+                    if (Player_2.isActive()) { 
+                        AppStore.emitChange('switch_from_flipscreen'); 
+                        break;
+                    }
                     AppStore.emitChange('switch_to_flipscreen');
-                }
-                
+                } 
                 break;
 
             //this triggers only in stage one when things are removed from the app-cart 
@@ -20252,6 +20278,7 @@ var AppStore = assign(EventEmitter.prototype, {
             case "FLIP_TO_SCREEN": 
                 AppStore.emitChange('switch_to_flipscreen');
                 break;
+
             case "FLIP_FROM_SCREEN": 
                 AppStore.emitChange('switch_from_flipscreen');
                 break;

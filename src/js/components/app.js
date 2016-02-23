@@ -13,6 +13,7 @@ var App = React.createClass({
 
     getInitialState: function() {
         return {
+            finalstate: false,
             flipscreen: false,
             currPlayer: 1,
             currState: 1,
@@ -44,6 +45,7 @@ var App = React.createClass({
     _flipfromChange: function() {
 
         switch(this.state.stage) {
+            //stage 1, part 2
             case 0:
                 this.setState({
                     stage: this.state.stage + 1,
@@ -53,7 +55,7 @@ var App = React.createClass({
                     misc: CharCart
                 });
                 break; 
-
+            //stage 2, part 1
             case 1:
                 AppStore.getState()
                 this.setState({
@@ -65,18 +67,21 @@ var App = React.createClass({
                     misc: CharAnswers
                 }); 
                 break;
-
+            //stage 2, part 2
             case 2:
                 this.setState({
                     stage: this.state.stage + 1,
                     flipscreen: false,
                     showResults: true,
                     body: CharQuestion,
-                    misc: CharAnswers
+                    misc: CharAnswers,
+                    finalstate: true
                 });
                 break;
+            //final stage 
             case 3:
                 this.setState({
+                    titlestate: this.state.titlestate + 1,
                     flipscreen: false,
                     end: AppStore.getSum(),
                     body: Compatibility,
