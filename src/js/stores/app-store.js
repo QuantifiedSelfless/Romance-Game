@@ -28,7 +28,7 @@ for(var i=0; i<(temp_list.length); i++) {
 
 for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
-        'id': i + 1,
+        'id': temp_titles.length - i,
         'stage': 1,
         'title': temp_titles[i]
     });
@@ -38,16 +38,24 @@ for(var i=0;i<(temp_titles.length); i++) {
 class player {
     constructor(id, active) {
         this.id = 'player' + id;
-        this.stage =  0;
+        this.stage = 0;
         this.active = active;
         this.characteristics = [];
         this.questions = [];
         this.sum = 0;
+        this.total = 25;
     }
     addToList(item, thisList) {
-        if (!item.inList) {
-            item['inList'] = true;
-            thisList.push(item);
+        switch (this.stage) { 
+            case 0:
+                if (!item.inList) {
+                    item['inList'] = true;
+                    thisList.push(item);
+                }
+                break;
+            case 1:
+                thisList.push(item);
+                break;
         }
     }
     removeFromList(index, thisList) {
@@ -63,9 +71,6 @@ class player {
         }
         for (var i=0; i<char_list.length; i++) {
             char_list[i]['inList'] = false; 
-        }
-        for (var i=0; i<answer_titles.length; i++) {
-            answer_titles[i]['inList'] = false;
         }
         this.active = !this.active;
     }
@@ -87,7 +92,7 @@ class player {
         for (var i=0; i<(this.questions.length); i++) {
            this.sum += this.questions[i].id;
         }
-        return this.sum;
+        return (this.sum / 25)*50;
     }
 }
 
@@ -139,8 +144,7 @@ var AppStore = assign(EventEmitter.prototype, {
         return player.activeList();
     },
     getSum: function() {
-        var player = activePlayer();
-        return player.sumList();
+        return Player_1.sumList() + Player_2.sumList();
     },
     flipscreen: function(i) {
         return flipmessage[i];
