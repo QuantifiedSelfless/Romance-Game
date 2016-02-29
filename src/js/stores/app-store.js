@@ -12,17 +12,97 @@ var answer_titles = [];
 //game data 
 var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2'];
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'];
-var temp_list = ['Considerate', 'Conscientious', 'Patient', 'Direct', 'Social', 'Disciplined', 'Deep', 'Experienced', 'Religious', 'Frugal', 'Freethinking', 'Generous', 'Loyal', 'Healthy', 'Optimistic', 'Responsible', 'Romantic', 'Well-Mannered', 'Sensitive', 'Protective'];
-var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
+var trait_list = [
+    { 'question': 'I value others\' well-being over my own.',
+        'trait': 'Considerate',
+        'flipped': false
+    },
+    { 'question': 'I work hard on tasks even when they prove to be difficult.',
+        'trait': 'Conscientious',
+        'flipped': false
+    },
+    { 'question': 'I get anxious when I have to wait through something I don\'t enjoy.',
+        'trait': 'Patient',
+        'flipped': true
+    },
+    { 'question': 'I hold back from speaking my thoughts if I think others\' will be displeased.',
+        'trait': 'Direct',
+        'flipped': true
+    },
+    { 'question': 'I prefer being around friends than being alone.',
+        'trait': 'Social',
+        'flipped': false
+    },
+    { 'question': 'It is difficult for me to commit to changes I want to make to myself.',
+        'trait': 'Disciplined',
+        'flipped': true
+    },
+    { 'question': 'I enjoy thinking about complex social and philosophical issues.',
+        'trait': 'Deep',
+        'flipped': false
+    },
+    { 'question': 'I have been in many relationships and know myself well as a partner.',
+        'trait': 'Experienced',
+        'flipped': false
+    },
+    { 'question': 'I am dedicated to a higher power above humanity.',
+        'trait': 'Religious',
+        'flipped': false
+    },
+    { 'question': 'If I have money, I tend to spend it.',
+        'trait': 'Frugal',
+        'flipped': true
+    },
+    { 'question': 'When I hear a new perspective, I have a hard time listening.',
+        'trait': 'Open-minded',
+        'flipped': true
+    },
+    { 'question': 'If someone asks for help, I do not expect anything in return.',
+        'trait': 'Generous',
+        'flipped': false
+    },
+    { 'question': 'I avoid situations that could jeopardize my relationships.',
+        'trait': 'Loyal',
+        'flipped': false
+    },
+    { 'question': 'I often feel like all attempts at doing good will fail.',
+        'trait': 'Optimistic',
+        'flipped': true
+    },
+    { 'question': 'I rarely consider how much I have exercised before deciding what to eat.',
+        'trait': 'Healthy',
+        'flipped': true
+    },
+    { 'question': 'I feel it is important I meet or exceed people\'s expectations of me.',
+        'trait': 'Responsible',
+        'flipped': false
+    },
+    { 'question': 'I am careful to learn the sexual preferences of my partner.',
+        'trait': 'Romantic',
+        'flipped': false
+    },
+    { 'question': 'Manners and social graces are very important to me.',
+        'trait': 'Polite',
+        'flipped': true
+    },
+    { 'question': 'I pay close attention to the emotions of the people around me.',
+        'trait': 'Sensitive',
+        'flipped': false
+    },
+    { 'question': 'When someone disrepects a friend or partner, I immediately defend them.',
+        'trait': 'Protective',
+        'flipped': false
+    }];
+
 var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree'];
 
 //build list objects for data passed by dispatcher
-for(var i=0; i<(temp_list.length); i++) {
+for(var i=0; i<(trait_list.length); i++) {
     char_list.push({
         'id': i + 1,
         'stage': 0,
-        'title': temp_list[i],
-        'question': question_list[i]
+        'title': trait_list[i]['trait'],
+        'question': trait_list[i]['question']
     });
 }    
 
