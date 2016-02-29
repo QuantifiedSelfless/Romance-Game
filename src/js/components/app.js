@@ -98,7 +98,7 @@ var App = React.createClass({
             <div>
                 <div>
                     <div className="titles">
-                        <img className="logo-container" src="../src/js/img/Yellow-Tree-logo.png"></img>
+                        <img className="logo-container2" src="../src/js/img/Yellow-Tree-logo.png"></img>
                         <this.state.title stage={this.state.titlestate} flipscreen={this.state.flipscreen}/>
                     </div>
                     <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer} /> : null}</div>

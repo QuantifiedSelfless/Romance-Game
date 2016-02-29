@@ -7,7 +7,7 @@ var GameTitles = React.createClass({
         return { titles: AppStore.getTitles() }
     },
 
-    render: function() { 
+    render: function() {
         var temp = !this.props.flipscreen ? AppStore.getTitles()[this.props.stage] : AppStore.flipscreen(AppStore.currentPlayer())
         return (
             <h1 className="title-font">{temp}</h1>
