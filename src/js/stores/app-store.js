@@ -186,7 +186,7 @@ var AppStore = assign(EventEmitter.prototype, {
 
             //this triggers only in stage one when things are removed from the app-cart 
             case "REMOVE_CHAR":
-                player.removeFromList(payload.action.item, player.activeList()); 
+                player.removeFromList(payload.action.index, player.activeList()); 
                 AppStore.emitChange('hide_button');
                 AppStore.emitChange('cart_update');
                 break;
