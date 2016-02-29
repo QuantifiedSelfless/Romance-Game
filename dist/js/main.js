@@ -20097,9 +20097,9 @@ var char_list = [];
 var answer_titles = [];
 
 //game data 
-var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2']
-var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'] 
-var temp_list = ['Considerate', 'Dedicated', 'Patient', 'Honest', 'Sociable', 'Disciplined', 'Deep', 'Elegent', 'Extraordinary', 'Freethinking', 'Generous', 'Hardworking', 'Loyal', 'Optimistic', 'Responsible', 'Romantic']
+var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2'];
+var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'];
+var temp_list = ['Considerate', 'Conscientious', 'Patient', 'Straightforward', 'Social', 'Disciplined', 'Deep', 'Elegant', 'Experienced', 'Religious', 'Frugal', 'Freethinking', 'Generous', 'Hardworking', 'Loyal', 'Healthy', 'Optimistic', 'Responsible', 'Romantic', 'Well-Mannered', 'Sensitive', 'Protective', 'Attractive'];
 var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
 var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree']
 
