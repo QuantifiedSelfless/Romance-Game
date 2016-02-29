@@ -97,14 +97,14 @@ var trait_list = [
 var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree'];
 
 //build list objects for data passed by dispatcher
-for(var i=0; i<(trait_list.length); i++) {
-    char_list.push({
-        'id': i + 1,
-        'stage': 0,
-        'title': trait_list[i]['trait'],
-        'question': trait_list[i]['question']
-    });
-}    
+// for(var i=0; i<(trait_list.length); i++) {
+//     char_list.push({
+//         'id': i + 1,
+//         'stage': 0,
+//         'title': trait_list[i]['trait'],
+//         'question': trait_list[i]['question']
+//     });
+// }    
 
 for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
@@ -149,8 +149,8 @@ class player {
         if (this.active) {
             this.addStage();
         }
-        for (var i=0; i<char_list.length; i++) {
-            char_list[i]['inList'] = false; 
+        for (var i=0; i<trait_list.length; i++) {
+            trait_list[i]['inList'] = false; 
         }
         this.active = !this.active;
     }
@@ -205,15 +205,15 @@ var AppStore = assign(EventEmitter.prototype, {
     getAnswerTitles: function() {
         return answer_titles;
     },
-    getTitles: function() {
-        return title_list;
+    getTraits: function() {
+        return trait_list;
     }, 
-    getQuestionList() {
-        return question_list;
-    },
-    getChar: function() {
-        return char_list;
-    },
+    // getQuestionList() {
+    //     return question_list;
+    // },
+    // getChar: function() {
+    //     return char_list;
+    // },
     switchPlayer: function() {
         Player_1.flipActive();
         Player_2.flipActive();
