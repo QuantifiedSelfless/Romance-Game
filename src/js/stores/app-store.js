@@ -120,8 +120,7 @@ class player {
         this.id = 'player' + id;
         this.stage = 0;
         this.active = active;
-        this.characteristics = [];
-        this.questions = [];
+        this.traits = [];
         this.sum = 0;
         this.total = 25;
     }
@@ -160,14 +159,14 @@ class player {
     addStage() {
         this.stage += 1;
     }
-    activeList() {
-        if (!this.stage) {
-            return this.characteristics;
-        }
-        else {
-            return this.questions;
-        }
-    }
+    // activeList() {
+    //     if (!this.stage) {
+    //         return this.characteristics;
+    //     }
+    //     else {
+    //         return this.questions;
+    //     }
+    // }
     sumList() {
         for (var i=0; i<(this.questions.length); i++) {
            this.sum += this.questions[i].id;
@@ -243,7 +242,7 @@ var AppStore = assign(EventEmitter.prototype, {
             //this triggers when things are added to the player lists
             case "ADD_CHAR":
                 //this allows for different active list lengths for stage two question list
-                var active_list_length = !player.activeStage() ? 5 : 5;
+                // var active_list_length = !player.activeStage() ? 5 : 5;
                 //only add if cart has room
                 if (player.activeList().length != active_list_length) {
                     player.addToList(payload.action.item, player.activeList());  
