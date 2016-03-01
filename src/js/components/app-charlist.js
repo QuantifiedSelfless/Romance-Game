@@ -12,7 +12,7 @@ var CharList = React.createClass({
     render: function() {
         var items = this.state.items.map(function (item, i) {
             return (
-                <AddToList item={item.trait} key={i}/> 
+                <AddToList item={item} stage={0} key={i}/> 
             );
         });
     

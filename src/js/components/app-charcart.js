@@ -10,7 +10,7 @@ var CharCart = React.createClass({
     getInitialState: function() {
         return {
             visible: 'hidden',
-            items: AppStore.getStageList()
+            items: AppStore.getQuestionList()
         };
     },
 
@@ -31,7 +31,7 @@ var CharCart = React.createClass({
     },
 
     _onChange: function() {
-        this.setState({ items: AppStore.getStageList() });
+        this.setState({ items: AppStore.getQuestionList() });
     },
 
     _showButton: function() {
@@ -50,7 +50,7 @@ var CharCart = React.createClass({
                 <div className="col-2 left overflow-hidden" key={i}>
                     <div className="btn-primary overflow-hidden mr4">
                         <div className="left remove"> <RemoveFromList index={i} /> </div>
-                        <div className="center px2"> {item.title} </div>
+                        <div className="center px2"> {item.trait} </div>
                     </div>
                 </div>
             );   

@@ -19668,8 +19668,9 @@ var AddToList = React.createClass({displayName: "AddToList",
     },
 
     render: function() {
+        var local_title = !this.props.stage ? this.props.item.trait : this.props.item.title;
         return (
-            React.createElement("div", {className: "col-2 center button-spacing"}, React.createElement("button", {className: "btn btn-primary", onClick: this.handler, key: this.props.key}, this.props.item.title))
+            React.createElement("div", {className: "col-2 center button-spacing"}, React.createElement("button", {className: "btn btn-primary", onClick: this.handler, key: this.props.key}, local_title))
         );
     }
     
@@ -19686,18 +19687,48 @@ AddToList = require('./app-addtolist.js');
 CharAnswers = React.createClass({displayName: "CharAnswers", 
 
     getInitialState: function() {
-        return { items: AppStore.getAnswerTitles() }
+        return { 
+            question_state: 0,
+            questions: AppStore.getQuestionList(),
+            titles: AppStore.getAnswerTitles(), 
+            titles_flipped: AppStore.getFlippedTitles()
+        }
     },
 
+    addChangeListener: function() {
+        AppStore.addChangeListener('cart_update', this.handler);
+    },
+
+    removeChangeListener: function() {
+        AppStore.removeChangeListener('cart_update', this.handler);
+    }, 
+
+    handler: function() {
+        this.question_state++;
+    },
+        
     render: function() {
-        var items = this.state.items.map( function(item, i) {
-            return (
-                React.createElement(AddToList, {item: item, key: i})
-            );
-        });
+        var items = []
+        for (var i=0; i<this.state.questions.length; i++) {
+            if (!this.state.questions[i].flipped) {
+                items.push(this.state.titles.map( function(item, i) {
+                    return (
+                        React.createElement(AddToList, {item: item, stage: 1, key: i})
+                    )
+                }))
+            }
+            else {
+                items.push(this.state.titles_flipped.map( function(item, i) {
+                    return (
+                        React.createElement(AddToList, {item: item, stage: 1, key: i})
+                    )
+                }))
+            }
+        }
+        console.log(items);
         return  (
             React.createElement("div", {className: "flex justify field"}, 
-                items
+                items[this.state.question_state]
             )
         );
     }
@@ -19719,7 +19750,7 @@ var CharCart = React.createClass({displayName: "CharCart",
     getInitialState: function() {
         return {
             visible: 'hidden',
-            items: AppStore.getStageList()
+            items: AppStore.getQuestionList()
         };
     },
 
@@ -19740,7 +19771,7 @@ var CharCart = React.createClass({displayName: "CharCart",
     },
 
     _onChange: function() {
-        this.setState({ items: AppStore.getStageList() });
+        this.setState({ items: AppStore.getQuestionList() });
     },
 
     _showButton: function() {
@@ -19759,7 +19790,7 @@ var CharCart = React.createClass({displayName: "CharCart",
                 React.createElement("div", {className: "col-2 left overflow-hidden", key: i}, 
                     React.createElement("div", {className: "btn-primary overflow-hidden mr4"}, 
                         React.createElement("div", {className: "left remove"}, " ", React.createElement(RemoveFromList, {index: i}), " "), 
-                        React.createElement("div", {className: "center px2"}, " ", item.title, " ")
+                        React.createElement("div", {className: "center px2"}, " ", item.trait, " ")
                     )
                 )
             );   
@@ -19789,13 +19820,13 @@ var AddToList = require('./app-addtolist.js');
 var CharList = React.createClass({displayName: "CharList",
     
     getInitialState: function () {
-        return { items: AppStore.getChar() };
+        return { items: AppStore.getTraits() };
     },
     
     render: function() {
         var items = this.state.items.map(function (item, i) {
             return (
-                React.createElement(AddToList, {item: item, key: i}) 
+                React.createElement(AddToList, {item: item, stage: 0, key: i}) 
             );
         });
     
@@ -19838,7 +19869,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
 
     render: function() {
         return (
-                React.createElement("h1", {className: "charquestion bold title-font"}, this.state.items[this.state.question])
+                React.createElement("h1", {className: "charquestion bold title-font"}, this.state.items[this.state.question].question)
         );
     }
 
@@ -20095,28 +20126,108 @@ var current_state = 0;
 //declare object lists
 var char_list = [];
 var answer_titles = [];
-
+var answer_titles_flipped = [];
 //game data 
 var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2'];
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'];
-var temp_list = ['Considerate', 'Conscientious', 'Patient', 'Straightforward', 'Social', 'Disciplined', 'Deep', 'Elegant', 'Experienced', 'Religious', 'Frugal', 'Freethinking', 'Generous', 'Hardworking', 'Loyal', 'Healthy', 'Optimistic', 'Responsible', 'Romantic', 'Well-Mannered', 'Sensitive', 'Protective', 'Attractive'];
-var question_list = ['Do you value others\' well being above your own?', 'Are you willing to sacrifice your free-time to achieve your goals and aspirations', 'Does it bother you when you have to wait on people', 'If you found a wallet on the ground, would you return it as you found it?', 'Would you normally rather stay home and read, or go out and spend time with a group of people?']
-var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree']
+var trait_list = [
+    { 'question': 'I value others\' well-being over my own.',
+        'trait': 'Considerate',
+        'flipped': false
+    },
+    { 'question': 'I work hard on tasks even when they prove to be difficult.',
+        'trait': 'Conscientious',
+        'flipped': false
+    },
+    { 'question': 'I get anxious when I have to wait through something I don\'t enjoy.',
+        'trait': 'Patient',
+        'flipped': true
+    },
+    { 'question': 'I hold back from speaking my thoughts if I think others\' will be displeased.',
+        'trait': 'Direct',
+        'flipped': true
+    },
+    { 'question': 'I prefer being around friends than being alone.',
+        'trait': 'Social',
+        'flipped': false
+    },
+    { 'question': 'It is difficult for me to commit to changes I want to make to myself.',
+        'trait': 'Disciplined',
+        'flipped': true
+    },
+    { 'question': 'I enjoy thinking about complex social and philosophical issues.',
+        'trait': 'Deep',
+        'flipped': false
+    },
+    { 'question': 'I have been in many relationships and know myself well as a partner.',
+        'trait': 'Experienced',
+        'flipped': false
+    },
+    { 'question': 'I am dedicated to a higher power above humanity.',
+        'trait': 'Religious',
+        'flipped': false
+    },
+    { 'question': 'If I have money, I tend to spend it.',
+        'trait': 'Frugal',
+        'flipped': true
+    },
+    { 'question': 'When I hear a new perspective, I have a hard time listening.',
+        'trait': 'Open-minded',
+        'flipped': true
+    },
+    { 'question': 'If someone asks for help, I do not expect anything in return.',
+        'trait': 'Generous',
+        'flipped': false
+    },
+    { 'question': 'I avoid situations that could jeopardize my relationships.',
+        'trait': 'Loyal',
+        'flipped': false
+    },
+    { 'question': 'I often feel like all attempts at doing good will fail.',
+        'trait': 'Optimistic',
+        'flipped': true
+    },
+    { 'question': 'I rarely consider how much I have exercised before deciding what to eat.',
+        'trait': 'Healthy',
+        'flipped': true
+    },
+    { 'question': 'I feel it is important I meet or exceed people\'s expectations of me.',
+        'trait': 'Responsible',
+        'flipped': false
+    },
+    { 'question': 'I am careful to learn the sexual preferences of my partner.',
+        'trait': 'Romantic',
+        'flipped': false
+    },
+    { 'question': 'Manners and social graces are very important to me.',
+        'trait': 'Polite',
+        'flipped': true
+    },
+    { 'question': 'I pay close attention to the emotions of the people around me.',
+        'trait': 'Sensitive',
+        'flipped': false
+    },
+    { 'question': 'When someone disrepects a friend or partner, I immediately defend them.',
+        'trait': 'Protective',
+        'flipped': false
+    }];
+
+var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree'];
 
 //build list objects for data passed by dispatcher
-for(var i=0; i<(temp_list.length); i++) {
-    char_list.push({
-        'id': i + 1,
-        'stage': 0,
-        'title': temp_list[i],
-        'question': question_list[i]
-    });
+for(var i=0; i<(trait_list.length); i++) {
+     char_list.push({
+         'title': title_list[i],
+     });
 }    
 
 for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
         'id': temp_titles.length - i,
-        'stage': 1,
+        'title': temp_titles[i]
+    });
+    answer_titles_flipped.push({
+        'id': i + 1,
         'title': temp_titles[i]
     });
 }
@@ -20127,7 +20238,7 @@ class player {
         this.id = 'player' + id;
         this.stage = 0;
         this.active = active;
-        this.characteristics = [];
+        this.traits = [];
         this.questions = [];
         this.sum = 0;
         this.total = 25;
@@ -20156,24 +20267,24 @@ class player {
         if (this.active) {
             this.addStage();
         }
-        for (var i=0; i<char_list.length; i++) {
-            char_list[i]['inList'] = false; 
+        for (var i=0; i<trait_list.length; i++) {
+            trait_list[i]['inList'] = false; 
         }
         this.active = !this.active;
+    }
+    activeList() {
+        if (!this.stage) {
+            return this.traits;
+        }
+        else {
+            return this.questions;
+        }
     }
     activeStage() {
         return this.stage;
     }
     addStage() {
         this.stage += 1;
-    }
-    activeList() {
-        if (!this.stage) {
-            return this.characteristics;
-        }
-        else {
-            return this.questions;
-        }
     }
     sumList() {
         for (var i=0; i<(this.questions.length); i++) {
@@ -20212,23 +20323,23 @@ var AppStore = assign(EventEmitter.prototype, {
     getAnswerTitles: function() {
         return answer_titles;
     },
+    getFlippedTitles: function() {
+        return answer_titles_flipped;
+    },
+    getTraits: function() {
+        return trait_list;
+    }, 
     getTitles: function() {
         return title_list;
-    }, 
-    getQuestionList() {
-        return question_list;
     },
-    getChar: function() {
-        return char_list;
+    getQuestionList: function() {
+        var player = activePlayer();
+        return player.traits; 
     },
     switchPlayer: function() {
         Player_1.flipActive();
         Player_2.flipActive();
         return Player_1.isActive();
-    },
-    getStageList: function() {
-        var player = activePlayer();
-        return player.activeList();
     },
     getSum: function() {
         return Player_1.sumList() + Player_2.sumList();
@@ -20250,19 +20361,19 @@ var AppStore = assign(EventEmitter.prototype, {
             //this triggers when things are added to the player lists
             case "ADD_CHAR":
                 //this allows for different active list lengths for stage two question list
-                var active_list_length = !player.activeStage() ? 5 : 5;
+                // var active_list_length = !player.activeStage() ? 5 : 5;
                 //only add if cart has room
-                if (player.activeList().length != active_list_length) {
+                if (player.activeList().length != 5) {
                     player.addToList(payload.action.item, player.activeList());  
                     AppStore.emitChange('cart_update');
                 }
-                if (!current_state && (player.activeList().length == active_list_length)) {
+                if (!current_state && (player.activeList().length == 5)) {
                     //this is a 'confirm' button for the stage one cart
                     AppStore.emitChange('show_button');
                     break;
                 }
                 //this will trigger from the flipscreen continue button
-                else if (player.activeList().length == active_list_length) {
+                else if (player.activeList().length == 5) {
                     if (Player_2.isActive()) { 
                         AppStore.emitChange('switch_from_flipscreen'); 
                         break;
