@@ -8,8 +8,8 @@ var Compatibility = React.createClass({
             width: this.props.stuff + '%'
         } 
         return (
-            <div> 
-                <h1>{"You are " + this.props.stuff + " percent compatible."}</h1>
+            <div className="mx2"> 
+                <h1 className="center">{"You are " + this.props.stuff + " percent compatible."}</h1>
                 <div className="meter yellow">
                     <span style={styles}></span>
                 </div>

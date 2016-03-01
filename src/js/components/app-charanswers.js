@@ -46,7 +46,7 @@ CharAnswers = React.createClass({
         }
         console.log(items);
         return  (
-            <div className="flex justify field">
+            <div className="flex flex-justify charlist field">
                 {items[this.state.question_state]}
             </div>
         );

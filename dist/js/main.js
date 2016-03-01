@@ -19670,7 +19670,9 @@ var AddToList = React.createClass({displayName: "AddToList",
     render: function() {
         var local_title = !this.props.stage ? this.props.item.trait : this.props.item.title;
         return (
-            React.createElement("div", {className: "col-2 center button-spacing"}, React.createElement("button", {className: "btn btn-primary", onClick: this.handler, key: this.props.key}, local_title))
+            React.createElement("div", {className: "col-2 center button-spacing"}, 
+                React.createElement("button", {className: "btn btn-primary", onClick: this.handler, key: this.props.key}, local_title)
+            )
         );
     }
     
@@ -19727,7 +19729,7 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
         }
         console.log(items);
         return  (
-            React.createElement("div", {className: "flex justify field"}, 
+            React.createElement("div", {className: "flex flex-justify charlist field"}, 
                 items[this.state.question_state]
             )
         );
@@ -19869,7 +19871,7 @@ CharQuestion = React.createClass({displayName: "CharQuestion",
 
     render: function() {
         return (
-                React.createElement("h1", {className: "charquestion bold title-font"}, this.state.items[this.state.question].question)
+                React.createElement("h1", {className: "charquestion center title-font"}, this.state.items[this.state.question].question)
         );
     }
 
@@ -19888,8 +19890,8 @@ var Compatibility = React.createClass({displayName: "Compatibility",
             width: this.props.stuff + '%'
         } 
         return (
-            React.createElement("div", null, 
-                React.createElement("h1", null, "You are " + this.props.stuff + " percent compatible."), 
+            React.createElement("div", {className: "mx2"}, 
+                React.createElement("h1", {className: "center"}, "You are " + this.props.stuff + " percent compatible."), 
                 React.createElement("div", {className: "meter yellow"}, 
                     React.createElement("span", {style: styles})
                 )
@@ -19913,7 +19915,7 @@ FlipScreen = React.createClass({displayName: "FlipScreen",
     render: function() {
         return (
             React.createElement("div", {className: "flex flex-column"}, 
-                React.createElement("img", {className: "logo-container2 mx-auto mb3", src: "../src/js/img/arrows-26-128.png"}), 
+                React.createElement("img", {className: "mx-auto mb3", src: "../src/js/img/arrows-26-128.png"}), 
                 React.createElement("button", {className: "btn btn-primary mx-auto mt3", onClick: this.handler}, "Continue")
             )
         )
