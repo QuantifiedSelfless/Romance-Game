@@ -10,7 +10,7 @@ var char_list = [];
 var answer_titles = [];
 var answer_titles_flipped = [];
 //game data 
-var flipmessage = ['Please flip the screen to player 1.', 'Please flip the screen to player 2'];
+var flipmessage = ['Please turn the screen to player 1.', 'Please turn the screen to player 2'];
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'];
 var trait_list = [
     { 'question': 'I value others\' well-being over my own.',
@@ -93,7 +93,6 @@ var trait_list = [
         'trait': 'Protective',
         'flipped': false
     }];
-
 var temp_titles = ['Strongly Agree', 'Agree', 'Not Sure', 'Disagree', 'Strongly Disagree'];
 
 //build list objects for data passed by dispatcher
@@ -105,11 +104,11 @@ for(var i=0; i<(trait_list.length); i++) {
 
 for(var i=0;i<(temp_titles.length); i++) {
     answer_titles.push({
-        'id': temp_titles.length - i,
+        'id': temp_titles.length - i - 1,
         'title': temp_titles[i]
     });
     answer_titles_flipped.push({
-        'id': i + 1,
+        'id': i,
         'title': temp_titles[i]
     });
 }
@@ -123,7 +122,6 @@ class player {
         this.traits = [];
         this.questions = [];
         this.sum = 0;
-        this.total = 25;
     }
     addToList(item, thisList) {
         switch (this.stage) { 
@@ -224,7 +222,12 @@ var AppStore = assign(EventEmitter.prototype, {
         return Player_1.isActive();
     },
     getSum: function() {
-        return Player_1.sumList() + Player_2.sumList();
+        var temp = Player_1.sumList() + Player_2.sumList();
+        for (var i=0; i<Player_1.traits.length; i++) {
+           if (Player_1.traits[i] == Player_2.traits[i]) temp+=7;
+        }
+        if (temp>100) temp = 100;
+        return temp
     },
     flipscreen: function(i) {
         return flipmessage[i];

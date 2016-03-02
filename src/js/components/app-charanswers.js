@@ -14,16 +14,16 @@ CharAnswers = React.createClass({
         }
     },
 
-    addChangeListener: function() {
-        AppStore.addChangeListener('cart_update', this.handler);
+    componentWillMount: function() {
+        AppStore.addChangeListener('cart_update', this._onChange);
     },
 
-    removeChangeListener: function() {
-        AppStore.removeChangeListener('cart_update', this.handler);
+    componentWillUnmount: function() {
+        AppStore.removeChangeListener('cart_update', this._onChange);
     }, 
 
-    handler: function() {
-        this.question_state++;
+    _onChange: function() {
+        this.setState({ question_state: this.state.question_state + 1 });
     },
         
     render: function() {
@@ -44,7 +44,6 @@ CharAnswers = React.createClass({
                 }))
             }
         }
-        console.log(items);
         return  (
             <div className="flex flex-justify charlist field">
                 {items[this.state.question_state]}
