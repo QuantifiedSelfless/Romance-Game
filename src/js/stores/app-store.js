@@ -9,7 +9,9 @@ var current_state = 0;
 var char_list = [];
 var answer_titles = [];
 var answer_titles_flipped = [];
+var similar_char = [];
 //game data 
+var thoughts = ["Romance is hard! Don't feel discouraged.", "You wouldn't last a week together", "You're either weirdly compatibile, or best friends."]
 var flipmessage = ['Please turn the screen to player 1.', 'Please turn the screen to player 2'];
 var title_list = ['Please choose 5 personalities you value the most in a romantic partner.', 'Answer the following questions about a romantic partner with the following characteristics.', 'Thanks for playing!'];
 var trait_list = [
@@ -221,10 +223,16 @@ var AppStore = assign(EventEmitter.prototype, {
         Player_2.flipActive();
         return Player_1.isActive();
     },
+    getSimilarChar: function() {
+        return similar_char;
+    },
     getSum: function() {
         var temp = Player_1.sumList() + Player_2.sumList();
         for (var i=0; i<Player_1.traits.length; i++) {
-           if (Player_1.traits[i] == Player_2.traits[i]) temp+=7;
+           if (Player_1.traits[i].trait == Player_2.traits[i].trait) {
+               temp+=7;
+               similar_char.push(Player_1.traits[i].trait);
+           }
         }
         if (temp>100) temp = 100;
         return temp
@@ -235,7 +243,9 @@ var AppStore = assign(EventEmitter.prototype, {
     getState: function() {
         current_state++;
     },
-
+    getThoughts: function() {
+        return thoughts;
+    },
     //event dispatcher
     dispatcherIndex: AppDispatcher.register(function(payload) {
         var action = payload.action;

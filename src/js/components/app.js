@@ -8,6 +8,7 @@ var CharAnswers = require('./app-charanswers.js');
 var Compatibility = require('./app-compatibility.js');
 var PlayerPick = require('./app-playerpick.js');
 var FlipScreen = require('./app-flipscreen.js');
+var FinalThoughts = require('./app-finalthoughts.js');
 
 var App = React.createClass({
 
@@ -85,7 +86,7 @@ var App = React.createClass({
                     flipscreen: false,
                     end: AppStore.getSum(),
                     body: Compatibility,
-                    showResults: false
+                    misc: FinalThoughts,
                 }); 
                 break;
             
