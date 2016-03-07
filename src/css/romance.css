@@ -1,6 +1,6 @@
 .titles{
     margin-top: 60px;
-    margin-bottom: 1em;
+    margin-bottom: 5em;
     overflow: hidden;
 }
 .charlist{
@@ -20,12 +20,23 @@
 .btn-primary {
     font-family: 'Quicksand';
 }
-
+ 
+.left .overflow-hidden{
+    height: 40px;
+}
+.cartbutton{
+    color: #fff;
+    background-color: #726556;
+    border-radius: 3px;
+}
 .choosen{
     height: 100%;
     margin: 0 20px 0 20px;
 }
-
+.cartsize{
+    font-size: larger;
+    padding-top: 5px;
+}
 .logo-container1{
     height: 100px;
     width: 100px;
@@ -38,7 +49,7 @@
     float: left;
     padding-top: 10px;
     padding-right: 10px;
-    margin-left: 15px;
+    margin-left: 50px;
 }
 
 .title-float{
@@ -73,6 +84,7 @@
 
 .title-font{
     font-family: 'Quicksand';
+    padding-left: 265px;
 } 
 
 .meter { 

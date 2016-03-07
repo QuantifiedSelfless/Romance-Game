@@ -22,6 +22,7 @@ var App = React.createClass({
             stage: 0,
             titlestate: 0,
             end: 0,
+            showPlayer: true,
             showResults: true,
             title: GameTitles, 
             body: CharList, 
@@ -39,6 +40,7 @@ var App = React.createClass({
             flipscreen: true,
             currPlayer: AppStore.switchPlayer(),
             body: FlipScreen,
+            showPlayer: false,
             showResults: false
         });
     },
@@ -51,6 +53,7 @@ var App = React.createClass({
                 this.setState({
                     stage: this.state.stage + 1,
                     flipscreen: false,
+                    showPlayer: true,
                     showResults: true,
                     body: CharList,
                     misc: CharCart
@@ -63,6 +66,7 @@ var App = React.createClass({
                     stage: this.state.stage + 1,
                     titlestate: this.state.titlestate + 1,
                     flipscreen: false,
+                    showPlayer: true,
                     showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers
@@ -73,6 +77,7 @@ var App = React.createClass({
                 this.setState({
                     stage: this.state.stage + 1,
                     flipscreen: false,
+                    showPlayer: true,
                     showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers,
@@ -84,10 +89,12 @@ var App = React.createClass({
                 this.setState({
                     titlestate: this.state.titlestate + 1,
                     flipscreen: false,
+                    showPlayer: false,
                     end: AppStore.getSum(),
                     body: Compatibility,
                     misc: FinalThoughts,
                 }); 
+                console.log("hlaksdjfalksd" + this.state.end);
                 break;
             
             break; 
@@ -102,10 +109,10 @@ var App = React.createClass({
                         <img className="logo-container2" src="../src/js/img/Yellow-Tree-logo.png"></img>
                         <this.state.title stage={this.state.titlestate} flipscreen={this.state.flipscreen}/>
                     </div>
-                    <div>{this.state.showResults ? <PlayerPick stuff={this.state.currPlayer} /> : null}</div>
+                    <div>{this.state.showPlayer ? <PlayerPick stuff={this.state.currPlayer} /> : null}</div>
                     <div><this.state.body stuff={this.state.end}/></div>
                 </div> 
-                <div>{this.state.showResults ? <this.state.misc /> : null}</div>
+                <div>{this.state.showResults ? <this.state.misc stuff={this.state.end}/> : null}</div>
             </div>
         )
     }

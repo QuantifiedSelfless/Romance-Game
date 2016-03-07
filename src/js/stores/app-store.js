@@ -4,7 +4,7 @@ var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
 //keeping track of gamestate in the store
 var current_state = 0;
-
+var checked = false;
 //declare object lists
 var char_list = [];
 var answer_titles = [];
@@ -169,6 +169,7 @@ class player {
         this.stage += 1;
     }
     sumList() {
+        if (this.sum) return this.sum;
         for (var i=0; i<(this.questions.length); i++) {
            this.sum += this.questions[i].id;
         }
@@ -185,7 +186,6 @@ function activePlayer() {
     var player = Player_1.isActive() ? Player_1 : Player_2;
     return player;
 }
-
 //AppStore event emitter
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function(change) {
@@ -224,7 +224,10 @@ var AppStore = assign(EventEmitter.prototype, {
         return Player_1.isActive();
     },
     getSimilarChar: function() {
-        return similar_char;
+        console.log(similar_char.length);
+        if (similar_char.length == 0) { return "You did not choose similar characteristics." }
+        if (similar_char.length == 1) { return "You had 1 characteristic in common." }
+        else  { return "You both chose the same " + similar_char.length + " characteristics." }
     },
     getSum: function() {
         var temp = Player_1.sumList() + Player_2.sumList();
@@ -234,8 +237,16 @@ var AppStore = assign(EventEmitter.prototype, {
                similar_char.push(Player_1.traits[i].trait);
            }
         }
-        if (temp>100) temp = 100;
+        console.log(temp);
         return temp
+    },
+    calculateMessage: function(i) {
+        console.log(i);
+        var temp = 0;
+        if (i<30) { temp = 0 }
+        if (i>30 && i<60) { temp = 1 }
+        if (i>60) { temp = 2 } 
+        return temp;
     },
     flipscreen: function(i) {
         return flipmessage[i];

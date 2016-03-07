@@ -48,9 +48,9 @@ var CharCart = React.createClass({
         var items = this.state.items.map(function(item, i) {
             return (
                 <div className="col-2 left overflow-hidden" key={i}>
-                    <div className="btn-primary overflow-hidden mr4">
-                        <div className="left remove"> <RemoveFromList index={i} /> </div>
-                        <div className="center px2"> {item.trait} </div>
+                    <div className="cartbutton overflow-hidden mr4">
+                        <div className="left remove cartsize bold"> <RemoveFromList index={i} /> </div>
+                        <div className="center px2 cartsize bold"> {item.trait} </div>
                     </div>
                 </div>
             );   

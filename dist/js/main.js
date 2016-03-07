@@ -19789,9 +19789,9 @@ var CharCart = React.createClass({displayName: "CharCart",
         var items = this.state.items.map(function(item, i) {
             return (
                 React.createElement("div", {className: "col-2 left overflow-hidden", key: i}, 
-                    React.createElement("div", {className: "btn-primary overflow-hidden mr4"}, 
-                        React.createElement("div", {className: "left remove"}, " ", React.createElement(RemoveFromList, {index: i}), " "), 
-                        React.createElement("div", {className: "center px2"}, " ", item.trait, " ")
+                    React.createElement("div", {className: "cartbutton overflow-hidden mr4"}, 
+                        React.createElement("div", {className: "left remove cartsize bold"}, " ", React.createElement(RemoveFromList, {index: i}), " "), 
+                        React.createElement("div", {className: "center px2 cartsize bold"}, " ", item.trait, " ")
                     )
                 )
             );   
@@ -19910,20 +19910,18 @@ var FinalThoughts = React.createClass({displayName: "FinalThoughts",
 
     getInitialState: function() {
         return {
-            similar: "You both chose the same " + AppStore.getSimilarChar().length + " characteristics.",
+            similar: AppStore.getSimilarChar(),
             thoughts: AppStore.getThoughts(),
-            sum: AppStore.getSum()
+            message: AppStore.calculateMessage(this.props.stuff)
         }
     },
 
     render: function() {
-        var temp = 0;
-        if (this.state.sum > 30 && this.state.sum < 60) { temp = 1; };
-        if (this.state.sum > 60) { temp = 2; };
+        console.log(this.state.similar);
         return (
             React.createElement("div", {className: "center"}, 
                 React.createElement("h3", null, this.state.similar), 
-                React.createElement("h3", null, this.state.thoughts[temp])
+                React.createElement("h3", null, this.state.thoughts[this.state.message])
             )
         )
     }
@@ -20031,6 +20029,7 @@ var App = React.createClass({displayName: "App",
             stage: 0,
             titlestate: 0,
             end: 0,
+            showPlayer: true,
             showResults: true,
             title: GameTitles, 
             body: CharList, 
@@ -20048,6 +20047,7 @@ var App = React.createClass({displayName: "App",
             flipscreen: true,
             currPlayer: AppStore.switchPlayer(),
             body: FlipScreen,
+            showPlayer: false,
             showResults: false
         });
     },
@@ -20060,6 +20060,7 @@ var App = React.createClass({displayName: "App",
                 this.setState({
                     stage: this.state.stage + 1,
                     flipscreen: false,
+                    showPlayer: true,
                     showResults: true,
                     body: CharList,
                     misc: CharCart
@@ -20072,6 +20073,7 @@ var App = React.createClass({displayName: "App",
                     stage: this.state.stage + 1,
                     titlestate: this.state.titlestate + 1,
                     flipscreen: false,
+                    showPlayer: true,
                     showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers
@@ -20082,6 +20084,7 @@ var App = React.createClass({displayName: "App",
                 this.setState({
                     stage: this.state.stage + 1,
                     flipscreen: false,
+                    showPlayer: true,
                     showResults: true,
                     body: CharQuestion,
                     misc: CharAnswers,
@@ -20093,10 +20096,12 @@ var App = React.createClass({displayName: "App",
                 this.setState({
                     titlestate: this.state.titlestate + 1,
                     flipscreen: false,
+                    showPlayer: false,
                     end: AppStore.getSum(),
                     body: Compatibility,
                     misc: FinalThoughts,
                 }); 
+                console.log("hlaksdjfalksd" + this.state.end);
                 break;
             
             break; 
@@ -20111,10 +20116,10 @@ var App = React.createClass({displayName: "App",
                         React.createElement("img", {className: "logo-container2", src: "../src/js/img/Yellow-Tree-logo.png"}), 
                         React.createElement(this.state.title, {stage: this.state.titlestate, flipscreen: this.state.flipscreen})
                     ), 
-                    React.createElement("div", null, this.state.showResults ? React.createElement(PlayerPick, {stuff: this.state.currPlayer}) : null), 
+                    React.createElement("div", null, this.state.showPlayer ? React.createElement(PlayerPick, {stuff: this.state.currPlayer}) : null), 
                     React.createElement("div", null, React.createElement(this.state.body, {stuff: this.state.end}))
                 ), 
-                React.createElement("div", null, this.state.showResults ? React.createElement(this.state.misc, null) : null)
+                React.createElement("div", null, this.state.showResults ? React.createElement(this.state.misc, {stuff: this.state.end}) : null)
             )
         )
     }
@@ -20153,7 +20158,7 @@ var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
 //keeping track of gamestate in the store
 var current_state = 0;
-
+var checked = false;
 //declare object lists
 var char_list = [];
 var answer_titles = [];
@@ -20318,6 +20323,7 @@ class player {
         this.stage += 1;
     }
     sumList() {
+        if (this.sum) return this.sum;
         for (var i=0; i<(this.questions.length); i++) {
            this.sum += this.questions[i].id;
         }
@@ -20334,7 +20340,6 @@ function activePlayer() {
     var player = Player_1.isActive() ? Player_1 : Player_2;
     return player;
 }
-
 //AppStore event emitter
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function(change) {
@@ -20373,7 +20378,10 @@ var AppStore = assign(EventEmitter.prototype, {
         return Player_1.isActive();
     },
     getSimilarChar: function() {
-        return similar_char;
+        console.log(similar_char.length);
+        if (similar_char.length == 0) { return "You did not choose similar characteristics." }
+        if (similar_char.length == 1) { return "You had 1 characteristic in common." }
+        else  { return "You both chose the same " + similar_char.length + " characteristics." }
     },
     getSum: function() {
         var temp = Player_1.sumList() + Player_2.sumList();
@@ -20383,8 +20391,16 @@ var AppStore = assign(EventEmitter.prototype, {
                similar_char.push(Player_1.traits[i].trait);
            }
         }
-        if (temp>100) temp = 100;
+        console.log(temp);
         return temp
+    },
+    calculateMessage: function(i) {
+        console.log(i);
+        var temp = 0;
+        if (i<30) { temp = 0 }
+        if (i>30 && i<60) { temp = 1 }
+        if (i>60) { temp = 2 } 
+        return temp;
     },
     flipscreen: function(i) {
         return flipmessage[i];

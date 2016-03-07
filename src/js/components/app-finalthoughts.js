@@ -5,20 +5,18 @@ var FinalThoughts = React.createClass({
 
     getInitialState: function() {
         return {
-            similar: "You both chose the same " + AppStore.getSimilarChar().length + " characteristics.",
+            similar: AppStore.getSimilarChar(),
             thoughts: AppStore.getThoughts(),
-            sum: AppStore.getSum()
+            message: AppStore.calculateMessage(this.props.stuff)
         }
     },
 
     render: function() {
-        var temp = 0;
-        if (this.state.sum > 30 && this.state.sum < 60) { temp = 1; };
-        if (this.state.sum > 60) { temp = 2; };
+        console.log(this.state.similar);
         return (
             <div className="center">
                 <h3>{this.state.similar}</h3>
-                <h3>{this.state.thoughts[temp]}</h3>
+                <h3>{this.state.thoughts[this.state.message]}</h3>
             </div>
         )
     }
