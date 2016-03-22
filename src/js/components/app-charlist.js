@@ -1,6 +1,6 @@
-var React = require('react');
-var AppStore = require('../stores/app-store.js');
-var AddToList = require('./app-addtolist.js');
+React = require('react');
+AppStore = require('../stores/app-store.js');
+AddToList = require('./app-addtolist.js');
 
 
 var CharList = React.createClass({

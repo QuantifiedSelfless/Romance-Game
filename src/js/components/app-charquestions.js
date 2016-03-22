@@ -1,7 +1,7 @@
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
-CharQuestion = React.createClass({
+var CharQuestion = React.createClass({
 
     getInitialState: function() {
         return {

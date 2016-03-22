@@ -3,7 +3,7 @@ AppStore = require('../stores/app-store.js');
 AppActions = require('../actions/app-actions.js');
 AddToList = require('./app-addtolist.js');
 
-CharAnswers = React.createClass({ 
+var CharAnswers = React.createClass({ 
 
     getInitialState: function() {
         return { 

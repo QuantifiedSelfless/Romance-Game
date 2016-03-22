@@ -1,14 +1,14 @@
-var React = require('react');
-var CharList = require('./app-charlist.js');
-var GameTitles = require('./app-gametitles.js');
-var CharCart = require('./app-charcart.js');
-var AppStore = require('../stores/app-store.js');
-var CharQuestion = require('./app-charquestions.js');
-var CharAnswers = require('./app-charanswers.js');
-var Compatibility = require('./app-compatibility.js');
-var PlayerPick = require('./app-playerpick.js');
-var FlipScreen = require('./app-flipscreen.js');
-var FinalThoughts = require('./app-finalthoughts.js');
+React = require('react');
+CharList = require('./app-charlist.js');
+GameTitles = require('./app-gametitles.js');
+CharCart = require('./app-charcart.js');
+AppStore = require('../stores/app-store.js');
+CharQuestion = require('./app-charquestions.js');
+CharAnswers = require('./app-charanswers.js');
+Compatibility = require('./app-compatibility.js');
+PlayerPick = require('./app-playerpick.js');
+FlipScreen = require('./app-flipscreen.js');
+FinalThoughts = require('./app-finalthoughts.js');
 
 var App = React.createClass({
 

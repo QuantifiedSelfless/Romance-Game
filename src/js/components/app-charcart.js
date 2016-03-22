@@ -1,7 +1,7 @@
-var React = require('react');
-var AppStore = require('../stores/app-store.js');
-var RemoveFromList = require('./app-removefromlist.js');
-var AppActions = require('../actions/app-actions.js');
+React = require('react');
+AppStore = require('../stores/app-store.js');
+RemoveFromList = require('./app-removefromlist.js');
+AppActions = require('../actions/app-actions.js');
 
 
 

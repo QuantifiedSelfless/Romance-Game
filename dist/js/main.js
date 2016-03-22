@@ -19658,8 +19658,8 @@ var AppActions = {
 module.exports = AppActions;
 
 },{"../dispatchers/app-dispatcher.js":176}],164:[function(require,module,exports){
-var React = require('react');
-var AppActions = require('../actions/app-actions.js');
+React = require('react');
+AppActions = require('../actions/app-actions.js');
 
 var AddToList = React.createClass({displayName: "AddToList",
 
@@ -19686,7 +19686,7 @@ AppStore = require('../stores/app-store.js');
 AppActions = require('../actions/app-actions.js');
 AddToList = require('./app-addtolist.js');
 
-CharAnswers = React.createClass({displayName: "CharAnswers", 
+var CharAnswers = React.createClass({displayName: "CharAnswers", 
 
     getInitialState: function() {
         return { 
@@ -19739,10 +19739,10 @@ CharAnswers = React.createClass({displayName: "CharAnswers",
 module.exports = CharAnswers;
 
 },{"../actions/app-actions.js":163,"../stores/app-store.js":178,"./app-addtolist.js":164,"react":162}],166:[function(require,module,exports){
-var React = require('react');
-var AppStore = require('../stores/app-store.js');
-var RemoveFromList = require('./app-removefromlist.js');
-var AppActions = require('../actions/app-actions.js');
+React = require('react');
+AppStore = require('../stores/app-store.js');
+RemoveFromList = require('./app-removefromlist.js');
+AppActions = require('../actions/app-actions.js');
 
 
 
@@ -19813,9 +19813,9 @@ var CharCart = React.createClass({displayName: "CharCart",
 module.exports = CharCart
 
 },{"../actions/app-actions.js":163,"../stores/app-store.js":178,"./app-removefromlist.js":174,"react":162}],167:[function(require,module,exports){
-var React = require('react');
-var AppStore = require('../stores/app-store.js');
-var AddToList = require('./app-addtolist.js');
+React = require('react');
+AppStore = require('../stores/app-store.js');
+AddToList = require('./app-addtolist.js');
 
 
 var CharList = React.createClass({displayName: "CharList",
@@ -19845,7 +19845,7 @@ module.exports = CharList
 React = require('react');
 AppStore = require('../stores/app-store.js');
 
-CharQuestion = React.createClass({displayName: "CharQuestion",
+var CharQuestion = React.createClass({displayName: "CharQuestion",
 
     getInitialState: function() {
         return {
@@ -19932,7 +19932,7 @@ module.exports = FinalThoughts;
 },{"../stores/app-store.js":178,"react":162}],171:[function(require,module,exports){
 React = require('react');
 
-FlipScreen = React.createClass({displayName: "FlipScreen",
+var FlipScreen = React.createClass({displayName: "FlipScreen",
     
     handler: function() {
         AppActions.flipFromScreen()
@@ -19987,8 +19987,8 @@ var PlayerPick = React.createClass({displayName: "PlayerPick",
 module.exports = PlayerPick;
 
 },{"react":162}],174:[function(require,module,exports){
-var React = require('react');
-var AppActions = require('../actions/app-actions.js');
+React = require('react');
+AppActions = require('../actions/app-actions.js');
 
 var RemoveFromList = React.createClass({displayName: "RemoveFromList",
     
@@ -20005,17 +20005,17 @@ var RemoveFromList = React.createClass({displayName: "RemoveFromList",
 module.exports = RemoveFromList;
 
 },{"../actions/app-actions.js":163,"react":162}],175:[function(require,module,exports){
-var React = require('react');
-var CharList = require('./app-charlist.js');
-var GameTitles = require('./app-gametitles.js');
-var CharCart = require('./app-charcart.js');
-var AppStore = require('../stores/app-store.js');
-var CharQuestion = require('./app-charquestions.js');
-var CharAnswers = require('./app-charanswers.js');
-var Compatibility = require('./app-compatibility.js');
-var PlayerPick = require('./app-playerpick.js');
-var FlipScreen = require('./app-flipscreen.js');
-var FinalThoughts = require('./app-finalthoughts.js');
+React = require('react');
+CharList = require('./app-charlist.js');
+GameTitles = require('./app-gametitles.js');
+CharCart = require('./app-charcart.js');
+AppStore = require('../stores/app-store.js');
+CharQuestion = require('./app-charquestions.js');
+CharAnswers = require('./app-charanswers.js');
+Compatibility = require('./app-compatibility.js');
+PlayerPick = require('./app-playerpick.js');
+FlipScreen = require('./app-flipscreen.js');
+FinalThoughts = require('./app-finalthoughts.js');
 
 var App = React.createClass({displayName: "App",
 
