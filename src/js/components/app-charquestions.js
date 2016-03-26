@@ -26,7 +26,7 @@ var CharQuestion = React.createClass({
 
     render: function() {
         return (
-                <h1 className="charquestion center title-font">{this.state.items[this.state.question].question}</h1>
+                <h2 className="charquestion center title-font">{this.state.items[this.state.question].question}</h2>
         );
     }
 

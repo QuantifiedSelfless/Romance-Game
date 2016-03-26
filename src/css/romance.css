@@ -28,15 +28,16 @@
     color: #fff;
     background-color: #726556;
     border-radius: 3px;
+    margin-right: 6%;
 }
 .choosen{
     height: 100%;
     margin: 0 20px 0 20px;
 }
 .cartsize{
-    font-size: larger;
+    font-size: 100%;
     padding-top: 5px;
-}
+} 
 .logo-container1{
     height: 100px;
     width: 100px;
@@ -45,9 +46,9 @@
     padding-right: 10px;
 }
 .logo-container2{
-    width: 10%;
+    width: 17%;
     float: left;
-    padding-top: 10px;
+    padding-top: 6%;
     padding-right: 10px;
     margin-left: 50px;
 }
@@ -78,13 +79,16 @@
   border-color: rgba(0,0,0,.125);
   border-radius: 3px;
 }
+
 .charquestion{    
     height: 80px;
 }
 
+.title-padding{
+    padding-left: 20%;
+} 
 .title-font{
     font-family: 'Quicksand';
-    padding-left: 265px;
 } 
 
 .meter { 

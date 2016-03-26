@@ -19670,7 +19670,7 @@ var AddToList = React.createClass({displayName: "AddToList",
     render: function() {
         var local_title = !this.props.stage ? this.props.item.trait : this.props.item.title;
         return (
-            React.createElement("div", {className: "col-2 center button-spacing"}, 
+            React.createElement("div", {className: "col-2 center  button-spacing"}, 
                 React.createElement("button", {className: "btn btn-primary", onClick: this.handler, key: this.props.key}, local_title)
             )
         );
@@ -19789,7 +19789,7 @@ var CharCart = React.createClass({displayName: "CharCart",
         var items = this.state.items.map(function(item, i) {
             return (
                 React.createElement("div", {className: "col-2 left overflow-hidden", key: i}, 
-                    React.createElement("div", {className: "cartbutton overflow-hidden mr4"}, 
+                    React.createElement("div", {className: "cartbutton overflow-hidden"}, 
                         React.createElement("div", {className: "left remove cartsize bold"}, " ", React.createElement(RemoveFromList, {index: i}), " "), 
                         React.createElement("div", {className: "center px2 cartsize bold"}, " ", item.trait, " ")
                     )
@@ -19870,7 +19870,7 @@ var CharQuestion = React.createClass({displayName: "CharQuestion",
 
     render: function() {
         return (
-                React.createElement("h1", {className: "charquestion center title-font"}, this.state.items[this.state.question].question)
+                React.createElement("h2", {className: "charquestion center title-font"}, this.state.items[this.state.question].question)
         );
     }
 
@@ -19963,7 +19963,7 @@ var GameTitles = React.createClass({displayName: "GameTitles",
     render: function() {
         var temp = !this.props.flipscreen ? AppStore.getTitles()[this.props.stage] : AppStore.flipscreen(AppStore.currentPlayer())
         return (
-            React.createElement("h1", {className: "title-font"}, temp)
+            React.createElement("h1", {className: "title-font title-padding"}, temp)
         )
     }
 
