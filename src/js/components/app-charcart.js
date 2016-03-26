@@ -1,8 +1,8 @@
 React = require('react');
+$ = require('jquery');
 AppStore = require('../stores/app-store.js');
 RemoveFromList = require('./app-removefromlist.js');
 AppActions = require('../actions/app-actions.js');
-
 
 
 var CharCart = React.createClass({
@@ -25,7 +25,9 @@ var CharCart = React.createClass({
         AppStore.removeChangeListener('show_button', this._showButton);
         AppStore.removeChangeListener('hide_button', this._hideButton);
     },
-
+    componentDidUpdate: function() {
+            $(document).scrollTop($(document).height());
+    },
     handler: function () {
         AppActions.flipToScreen()
     },

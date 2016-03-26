@@ -1,6 +1,6 @@
 .titles{
-    margin-top: 60px;
-    margin-bottom: 5em;
+    margin-top: 1%;
+    margin-bottom: 3em;
     overflow: hidden;
 }
 .charlist{
@@ -10,7 +10,7 @@
 .charlist .btn {
     margin-top: .2em;
     margin-bottom: .2em;
-    width: 85%;
+    width: 96%;
 }
 
 .btn {
@@ -22,7 +22,7 @@
 }
  
 .left .overflow-hidden{
-    height: 40px;
+    height: 35px;
 }
 .cartbutton{
     color: #fff;
@@ -31,7 +31,7 @@
     margin-right: 6%;
 }
 .choosen{
-    height: 100%;
+    height: 100%; 
     margin: 0 20px 0 20px;
 }
 .cartsize{
@@ -46,9 +46,9 @@
     padding-right: 10px;
 }
 .logo-container2{
-    width: 17%;
+    width: 12%;
     float: left;
-    padding-top: 6%;
+    padding-top: 2%;
     padding-right: 10px;
     margin-left: 50px;
 }
@@ -65,7 +65,8 @@
     color: #000;
 }
 .confirm{
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .confirm .btn-primary {
@@ -81,7 +82,7 @@
 }
 
 .charquestion{    
-    height: 80px;
+    height: 10%;
 }
 
 .title-padding{

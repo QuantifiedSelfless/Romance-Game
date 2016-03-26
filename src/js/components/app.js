@@ -94,7 +94,6 @@ var App = React.createClass({
                     body: Compatibility,
                     misc: FinalThoughts,
                 }); 
-                console.log("hlaksdjfalksd" + this.state.end);
                 break;
             
             break; 

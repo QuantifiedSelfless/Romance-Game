@@ -227,7 +227,7 @@ var AppStore = assign(EventEmitter.prototype, {
         console.log(similar_char.length);
         if (similar_char.length == 0) { return "You did not choose similar characteristics." }
         if (similar_char.length == 1) { return "You had 1 characteristic in common." }
-        else  { return "You both chose the same " + similar_char.length + " characteristics." }
+        else  { return "You chose " + similar_char.length + " of the same characteristics." }
     },
     getSum: function() {
         var temp = Player_1.sumList() + Player_2.sumList();
