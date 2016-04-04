@@ -10,7 +10,7 @@ var CharCart = React.createClass({
     getInitialState: function() {
         return {
             visible: 'hidden',
-            items: AppStore.getQuestionList()
+            items: AppStore.getActiveQuestionList()
         };
     },
 
@@ -33,7 +33,7 @@ var CharCart = React.createClass({
     },
 
     _onChange: function() {
-        this.setState({ items: AppStore.getQuestionList() });
+        this.setState({ items: AppStore.getActiveQuestionList() });
     },
 
     _showButton: function() {

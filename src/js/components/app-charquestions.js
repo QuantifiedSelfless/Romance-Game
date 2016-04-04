@@ -6,7 +6,7 @@ var CharQuestion = React.createClass({
     getInitialState: function() {
         return {
             question: 0,
-            items: AppStore.getQuestionList()
+            items: AppStore.getInactiveQuestionList()
         };
     },
 

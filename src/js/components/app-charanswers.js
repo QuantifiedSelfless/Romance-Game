@@ -8,7 +8,7 @@ var CharAnswers = React.createClass({
     getInitialState: function() {
         return { 
             question_state: 0,
-            questions: AppStore.getQuestionList(),
+            questions: AppStore.getInactiveQuestionList(),
             titles: AppStore.getAnswerTitles(), 
             titles_flipped: AppStore.getFlippedTitles()
         }

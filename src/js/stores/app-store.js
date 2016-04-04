@@ -186,6 +186,10 @@ function activePlayer() {
     var player = Player_1.isActive() ? Player_1 : Player_2;
     return player;
 }
+function inactivePlayer() {
+    var player = Player_1.isActive() ? Player_2 : Player_1;
+    return player;
+}
 //AppStore event emitter
 var AppStore = assign(EventEmitter.prototype, {
     emitChange: function(change) {
@@ -214,9 +218,13 @@ var AppStore = assign(EventEmitter.prototype, {
     getTitles: function() {
         return title_list;
     },
-    getQuestionList: function() {
+    getActiveQuestionList: function() {
         var player = activePlayer();
         return player.traits; 
+    },
+    getInactiveQuestionList: function() {
+        var player = inactivePlayer();
+        return player.traits;
     },
     switchPlayer: function() {
         Player_1.flipActive();
