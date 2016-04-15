@@ -11,9 +11,9 @@ FlipScreen = require('./app-flipscreen.js');
 FinalThoughts = require('./app-finalthoughts.js');
 io = require('socket.io-client');
 
-var socket = io.connect('10.0.0.145:3000');
+var socket = io.connect('http://10.0.0.145:3000');
 socket.on('rfid', function(data){
-    setTimeout(function() { window.location = "10.0.0.145:8000"}, 2000)
+    setTimeout(function() { window.location = "http://10.0.0.145:8000"}, 2000)
 });
 var App = React.createClass({
 
