@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/QuantifiedSelfless/Romance-Game/issues"
   },
-  "homepage": "https://github.com/QuantifiedSelfless/Romance-Game#readme",
+  "homepage": "https://github.com/QuantifiedSelfless/Romance-Game",
   "dependencies": {
     "basscss": "^8.0.1",
     "browserify": "^13.0.0",
@@ -28,5 +28,8 @@
     "react-router-component": "^0.31.4",
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "devDependencies": {
+    "socket.io-client": "^1.4.5"
   }
 }

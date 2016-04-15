@@ -5,8 +5,8 @@ var source = require('vinyl-source-stream');
 
 gulp.task('browserify', function() {
         browserify({
-        entries: ['./src/js/main.js']
-        transform: ['reactify']
+        entries: ['./src/js/main.js'],
+        transform: [reactify]
         })
         .bundle()
         .pipe(source('main.js'))

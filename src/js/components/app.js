@@ -9,7 +9,12 @@ Compatibility = require('./app-compatibility.js');
 PlayerPick = require('./app-playerpick.js');
 FlipScreen = require('./app-flipscreen.js');
 FinalThoughts = require('./app-finalthoughts.js');
+io = require('socket.io-client');
 
+var socket = io.connect('10.0.0.145:3000');
+socket.on('rfid', function(data){
+    setTimeout(function() { window.location = "10.0.0.145:8000"}, 2000)
+});
 var App = React.createClass({
 
     getInitialState: function() {
