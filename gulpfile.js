@@ -20,6 +20,8 @@ gulp.task('copy', function() {
         .pipe(gulp.dest('dist'));
     gulp.src('src/css/gamecss.css')
         .pipe(gulp.dest('dist'));
+    gulp.src('src/img/*')
+        .pipe(gulp.dest('dist/img'));
 });
 gulp.task('default', ['browserify', 'copy']);
 gulp.task('watch', ['browserify', 'copy'], function() {

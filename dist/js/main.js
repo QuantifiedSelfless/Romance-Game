@@ -37040,7 +37040,7 @@ var FlipScreen = React.createClass({displayName: "FlipScreen",
     render: function() {
         return (
             React.createElement("div", {className: "flex flex-column"}, 
-                React.createElement("img", {className: "mx-auto mb3", src: "../src/js/img/arrows-26-128.png"}), 
+                React.createElement("img", {className: "mx-auto mb3", src: "./img/arrows-26-128.png"}), 
                 React.createElement("button", {className: "btn btn-primary mx-auto mt3", onClick: this.handler}, "Continue")
             )
         )
@@ -37216,7 +37216,7 @@ var App = React.createClass({displayName: "App",
             React.createElement("div", null, 
                 React.createElement("div", null, 
                     React.createElement("div", {className: "titles"}, 
-                        React.createElement("img", {className: "logo-container2", src: "../src/js/img/Yellow-Tree-logo.png"}), 
+                        React.createElement("img", {className: "logo-container2", src: "./img/Yellow-Tree-logo.png"}), 
                         React.createElement(this.state.title, {stage: this.state.titlestate, flipscreen: this.state.flipscreen})
                     ), 
                     React.createElement("div", null, this.state.showPlayer ? React.createElement(PlayerPick, {stuff: this.state.currPlayer}) : null), 
