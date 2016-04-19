@@ -10,7 +10,9 @@ var FlipScreen = React.createClass({
         return (
             <div className="flex flex-column center">
                 <img className="mx-auto mb3" src="./img/arrows-26-128.png"></img>
-                <button className="btn btn-primary mt3" onClick={this.handler}>Continue</button>
+                <div className="col-2 mx-auto">
+                    <button className="btn btn-primary mx-auto mt3" onClick={this.handler}>Continue</button>
+                </div>
             </div>
         )
     }
