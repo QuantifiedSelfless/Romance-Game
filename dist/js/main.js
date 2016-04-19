@@ -37041,7 +37041,7 @@ var FlipScreen = React.createClass({displayName: "FlipScreen",
         return (
             React.createElement("div", {className: "flex flex-column"}, 
                 React.createElement("img", {className: "mx-auto mb3", src: "./img/arrows-26-128.png"}), 
-                React.createElement("button", {className: "btn btn-primary mx-auto mt3", onClick: this.handler}, "Continue")
+                React.createElement("button", {className: "btn btn-primary mt3", onClick: this.handler}, "Continue")
             )
         )
     }
@@ -37117,9 +37117,9 @@ FlipScreen = require('./app-flipscreen.js');
 FinalThoughts = require('./app-finalthoughts.js');
 io = require('socket.io-client');
 
-var socket = io.connect('http://10.0.0.145:3000');
+var socket = io.connect('http://romance.local:3000');
 socket.on('rfid', function(data){
-    setTimeout(function() { window.location = "http://10.0.0.145:8000"}, 2000)
+    setTimeout(function() { window.location = "http://romance.local:8000"}, 2000)
 });
 var App = React.createClass({displayName: "App",
 
