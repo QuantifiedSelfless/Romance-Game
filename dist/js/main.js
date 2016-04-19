@@ -37039,9 +37039,9 @@ var FlipScreen = React.createClass({displayName: "FlipScreen",
 
     render: function() {
         return (
-            React.createElement("div", {className: "flex flex-column"}, 
+            React.createElement("div", {className: "flex flex-column center"}, 
                 React.createElement("img", {className: "mx-auto mb3", src: "./img/arrows-26-128.png"}), 
-                React.createElement("button", {className: "btn btn-primary mt3", onClick: this.handler}, "Continue")
+                React.createElement("button", {className: "btn btn-primary mx-auto mt3", onClick: this.handler}, "Continue")
             )
         )
     }
