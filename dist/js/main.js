@@ -37505,7 +37505,7 @@ var AppStore = assign(EventEmitter.prototype, {
            }
         }
         console.log(temp);
-        return temp
+        return Math.max(temp, 100);
     },
     calculateMessage: function(i) {
         console.log(i);
